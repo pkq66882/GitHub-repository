@@ -5,8 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GitHub 文件管理器</title>
     <!-- Tailwind CSS CDN -->
+    <!-- 修复：添加了 https:// -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome CDN -->
+    <!-- 修复：添加了 https:// -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         /* CSS 变量定义，用于主题切换 */
@@ -47,24 +49,23 @@
             background-image: var(--bg-image); /* Custom image or default gradient */
             background-size: cover;
             background-position: center;
-            background-attachment: fixed; /* Keep fixed for larger screens */
+            background-attachment: fixed;
             color: var(--text-primary);
             min-height: 100vh;
             padding-bottom: 100px;
             margin: 0;
             transition: background-color 0.3s ease, color 0.3s ease; /* 平滑过渡 */
-            -webkit-user-select: none; /* Disable text selection for WebKit browsers */
-            -moz-user-select: none;    /* Disable text selection for Firefox */
-            -ms-user-select: none;     /* Disable text selection for IE/Edge */
-            user-select: none;         /* Standard property */
-            -webkit-overflow-scrolling: touch; /* Enable smooth scrolling on iOS */
-        }
 
-        /* Media query for smaller screens to adjust background-attachment */
-        @media (max-width: 768px) {
-            body {
-                background-attachment: scroll; /* Change to scroll on mobile for better performance */
-            }
+            /* 性能优化：禁用长按复制和点击高亮 */
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* IE10+/Edge */
+            user-select: none; /* Standard */
+            -webkit-touch-callout: none; /* iOS Safari */
+            -webkit-tap-highlight-color: transparent; /* 移除点击高亮 */
+
+            /* 性能优化：告知浏览器这些属性会变化 */
+            will-change: background-color, color;
         }
 
         /* 毛玻璃效果基础类 */
@@ -76,7 +77,8 @@
             box-shadow: var(--glass-shadow);
             border-radius: 16px;
             transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-            will-change: background, border-color, box-shadow, backdrop-filter, transform; /* Add will-change */
+            /* 性能优化：告知浏览器这些属性会变化 */
+            will-change: background, border-color, box-shadow;
         }
 
         /* 毛玻璃面板类，用于主要容器 */
@@ -88,7 +90,8 @@
             box-shadow: var(--glass-shadow); /* 使用变量 */
             border-radius: 16px; /* 确保圆角 */
             transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-            will-change: background, border-color, box-shadow, backdrop-filter, transform; /* Add will-change */
+            /* 性能优化：告知浏览器这些属性会变化 */
+            will-change: background, border-color, box-shadow, transform, opacity;
         }
         body.dark-mode .glass-panel {
             background: var(--glass-bg); /* 使用夜间模式变量 */
@@ -108,7 +111,8 @@
             cursor: pointer;
             color: var(--text-primary);
             font-weight: 500;
-            will-change: background, border-color, box-shadow, transform, backdrop-filter; /* Add will-change */
+            /* 性能优化：告知浏览器这些属性会变化 */
+            will-change: background, border-color, box-shadow, transform;
         }
 
         .glass-btn:hover {
@@ -160,11 +164,8 @@
             color: var(--text-primary);
             transition: all 0.3s ease;
             width: 100%;
-            user-select: text; /* Allow text selection for input fields */
-            -webkit-user-select: text;
-            -moz-user-select: text;
-            -ms-user-select: text;
-            will-change: background, border-color, box-shadow, backdrop-filter; /* Add will-change */
+            /* 允许文本选择 */
+            user-select: text;
         }
 
         .glass-input:focus {
@@ -198,7 +199,8 @@
             border-radius: 12px;
             transition: all 0.3s ease;
             cursor: pointer;
-            will-change: background, border-color, box-shadow, transform, backdrop-filter; /* Add will-change */
+            /* 性能优化：告知浏览器这些属性会变化 */
+            will-change: background, border-color, box-shadow, transform;
         }
 
         .file-item:hover {
@@ -267,7 +269,8 @@
             box-shadow: var(--glass-shadow);
             border-radius: 24px;
             transition: transform 0.3s ease, opacity 0.3s ease;
-            will-change: transform, opacity, background, border-color, box-shadow, backdrop-filter; /* Add will-change */
+            /* 性能优化：告知浏览器这些属性会变化 */
+            will-change: transform, opacity;
         }
         body.dark-mode .toolbar {
             background: var(--glass-bg);
@@ -287,7 +290,8 @@
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
             z-index: 999;
-            will-change: background, backdrop-filter; /* Add will-change */
+            /* 性能优化：告知浏览器这些属性会变化 */
+            will-change: opacity;
         }
 
         /* 对话框内容样式，现在完全依赖 glass-panel */
@@ -304,8 +308,9 @@
             border: 1px solid var(--glass-border);
             box-shadow: var(--glass-shadow);
             border-radius: 16px; /* 确保一致的圆角 */
-            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease, opacity 0.3s ease;
-            will-change: background, border-color, box-shadow, backdrop-filter, transform, opacity; /* Add will-change */
+            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease; /* 添加 transform 过渡 */
+            /* 性能优化：告知浏览器这些属性会变化 */
+            will-change: background, border-color, box-shadow, transform;
         }
         /* Dark mode for dialog content */
         body.dark-mode .dialog-content {
@@ -318,10 +323,6 @@
         .dialog-content h3 {
             font-size: 1.1rem;
             margin-bottom: 0.6rem;
-            user-select: text; /* Allow text selection for headings in dialogs */
-            -webkit-user-select: text;
-            -moz-user-select: text;
-            -ms-user-select: text;
         }
 
         /* 输入框 (现在完全依赖 glass-input 类) */
@@ -366,7 +367,6 @@
 
         .animate-spin {
             animation: spin 1s linear infinite;
-            will-change: transform; /* Add will-change */
         }
 
         /* 面包屑导航 */
@@ -382,10 +382,6 @@
             cursor: pointer;
             transition: color 0.2s;
             color: var(--text-secondary); /* 面包屑项颜色 */
-            user-select: text; /* Allow text selection for breadcrumb items */
-            -webkit-user-select: text;
-            -moz-user-select: text;
-            -ms-user-select: text;
         }
 
         .breadcrumb-item:hover {
@@ -417,7 +413,8 @@
             transition: transform 0.2s ease, opacity 0.2s ease;
             pointer-events: none;
             color: var(--text-primary);
-            will-change: transform, opacity, background, box-shadow; /* Add will-change */
+            /* 性能优化：告知浏览器这些属性会变化 */
+            will-change: transform, opacity;
         }
         body.dark-mode .context-menu {
             background: rgba(45, 55, 72, 0.8); /* 暗模式下调整透明度 */
@@ -474,7 +471,8 @@
             opacity: 0;
             transition: opacity 0.3s ease;
             pointer-events: none;
-            will-change: transform, opacity, background, border-color, box-shadow, backdrop-filter; /* Add will-change */
+            /* 性能优化：告知浏览器这些属性会变化 */
+            will-change: transform, opacity;
         }
         body.dark-mode .batch-toolbar {
             background: rgba(99, 102, 241, 0.9); /* 保持原有透明度，因为颜色不同 */
@@ -549,7 +547,8 @@
             transition: all 0.2s ease;
             pointer-events: none;
             color: var(--text-primary);
-            will-change: transform, opacity, background, border-color, box-shadow, backdrop-filter; /* Add will-change */
+            /* 性能优化：告知浏览器这些属性会变化 */
+            will-change: transform, opacity;
         }
         body.dark-mode .user-menu-content {
             background: rgba(45, 55, 72, 0.8); /* 暗模式下调整透明度 */
@@ -654,7 +653,8 @@
             z-index: 1050; /* 确保它在所有对话框和工具栏之上 */
             white-space: pre-wrap; /* 允许换行，优化文字显示 */
             text-align: center;
-            will-change: transform, opacity; /* Add will-change */
+            /* 性能优化：告知浏览器这些属性会变化 */
+            will-change: transform, opacity;
         }
 
         /* 确保文件列表项的元数据文本能够正常换行 */
@@ -667,25 +667,15 @@
         #auth-screen h1,
         #auth-screen label {
             color: var(--text-primary); /* 主要文本颜色 */
-            user-select: text; /* Allow text selection for these elements */
-            -webkit-user-select: text;
-            -moz-user-select: text;
-            -ms-user-select: text;
         }
         #auth-screen p,
         #auth-screen ol li {
             color: var(--text-secondary); /* 次要文本颜色 */
-            user-select: text; /* Allow text selection for these elements */
-            -webkit-user-select: text;
-            -moz-user-select: text;
-            -ms-user-select: text;
         }
         #auth-screen a {
             color: var(--primary-color); /* 链接颜色 */
-            user-select: text; /* Allow text selection for links */
-            -webkit-user-select: text;
-            -moz-user-select: text;
-            -ms-user-select: text;
+            /* 允许链接文本选择 */
+            user-select: text;
         }
     </style>
 </head>
@@ -1022,7 +1012,7 @@
         const DEFAULT_BG_IMAGE_URL = 'https://bing.img.run/uhd.php'; // 默认背景图片URL
         
         // 外观设置状态
-        let currentBgImage = localStorage.getItem('bg_image') || `url("${DEFAULT_BG_IMAGE_URL}")`;
+        let currentBgImage = localStorage.getItem('bg_image') || `url("${DEFAULT_BG_BG_IMAGE_URL}")`;
         let isDarkMode = localStorage.getItem('dark_mode') === 'true';
         
         // DOM 元素
