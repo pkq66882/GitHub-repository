@@ -14,7 +14,7 @@
             --glass-bg: rgba(255, 255, 255, 0.8); /* 修改为亮模式下80%不透明度 */
             --glass-border: rgba(255, 255, 255, 0.4); /* 提高边框透明度 */
             --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-            --glass-blur: blur(10px); /* 优化：降低模糊度以提升性能 */
+            --glass-blur: blur(12px);
             --primary-color: #4f46e5;
             --text-primary: #1e293b;
             --text-secondary: #475569;
@@ -28,7 +28,6 @@
             --glass-bg: rgba(30, 30, 30, 0.8); /* 修改为暗模式下80%不透明度 */
             --glass-border: rgba(255, 255, 255, 0.2); /* 提高边框透明度 */
             --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-            --glass-blur: blur(10px); /* 优化：降低模糊度以提升性能 */
             --primary-color: #6366f1; /* 适应夜间模式的强调色 */
             --text-primary: #a0aec0; /* 修改：与 --text-secondary 保持一致 */
             --text-secondary: #a0aec0; /* 已是此值 */
@@ -54,11 +53,6 @@
             padding-bottom: 100px;
             margin: 0;
             transition: background-color 0.3s ease, color 0.3s ease; /* 平滑过渡 */
-            /* 禁用文字选择功能，尤其在移动端 */
-            -webkit-user-select: none; /* Safari */
-            -moz-user-select: none; /* Firefox */
-            -ms-user-select: none; /* IE10+/Edge */
-            user-select: none; /* Standard */
         }
 
         /* 毛玻璃效果基础类 */
@@ -81,6 +75,7 @@
             box-shadow: var(--glass-shadow); /* 使用变量 */
             border-radius: 16px; /* 确保圆角 */
             transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            will-change: background, border-color, box-shadow; /* 优化：添加 will-change */
         }
         body.dark-mode .glass-panel {
             background: var(--glass-bg); /* 使用夜间模式变量 */
@@ -91,8 +86,8 @@
         /* 按钮样式 */
         .glass-btn {
             background: rgba(255, 255, 255, 0.8); /* 亮模式下提高透明度 */
-            backdrop-filter: blur(6px); /* 优化：降低模糊度 */
-            -webkit-backdrop-filter: blur(6px); /* 优化：降低模糊度 */
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.4); /* 亮模式下提高边框透明度 */
             box-shadow: 0 4px 16px 0 rgba(31, 38, 135, 0.1);
             border-radius: 12px;
@@ -100,16 +95,17 @@
             cursor: pointer;
             color: var(--text-primary);
             font-weight: 500;
+            will-change: transform, background, box-shadow; /* 优化：添加 will-change */
         }
 
         .glass-btn:hover {
-            transform: translateY(-2px);
+            transform: translateY(-2px) translateZ(0); /* 优化：强制硬件加速 */
             box-shadow: 0 6px 20px 0 rgba(31, 38, 135, 0.2);
             background: rgba(255, 255, 255, 0.9); /* 亮模式下悬停时更高透明度 */
         }
 
         .glass-btn:active {
-            transform: translateY(0);
+            transform: translateY(0) translateZ(0); /* 优化：强制硬件加速 */
             box-shadow: 0 2px 8px 0 rgba(31, 38, 135, 0.1);
         }
 
@@ -143,8 +139,8 @@
         /* 输入框样式 */
         .glass-input {
             background: rgba(255, 255, 255, 0.8); /* 亮模式下提高透明度 */
-            backdrop-filter: blur(6px); /* 优化：降低模糊度 */
-            -webkit-backdrop-filter: blur(6px); /* 优化：降低模糊度 */
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.4); /* 亮模式下提高边框透明度 */
             border-radius: 12px;
             padding: 12px 16px;
@@ -178,17 +174,18 @@
         /* 文件列表项 */
         .file-item {
             background: rgba(255, 255, 255, 0.8); /* 亮模式下提高透明度 */
-            backdrop-filter: blur(6px); /* 优化：降低模糊度 */
-            -webkit-backdrop-filter: blur(6px); /* 优化：降低模糊度 */
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
             border: 1px solid rgba(255, 255, 255, 0.4); /* 亮模式下提高边框透明度 */
             border-radius: 12px;
             transition: all 0.3s ease;
             cursor: pointer;
+            will-change: transform, background, border-color, box-shadow; /* 优化：添加 will-change */
         }
 
         .file-item:hover {
             background: rgba(255, 255, 255, 0.9); /* 亮模式下悬停时更高透明度 */
-            transform: translateY(-2px);
+            transform: translateY(-2px) translateZ(0); /* 优化：强制硬件加速 */
             box-shadow: 0 6px 20px 0 rgba(31, 38, 135, 0.1);
         }
 
@@ -252,15 +249,11 @@
             box-shadow: var(--glass-shadow);
             border-radius: 24px;
             transition: transform 0.3s ease, opacity 0.3s ease;
-        }
-        body.dark-mode .toolbar {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            box-shadow: var(--glass-shadow);
+            will-change: transform, opacity; /* 优化：添加 will-change */
         }
 
         .toolbar.hidden {
-            transform: translateY(100px);
+            transform: translateY(100px) translateZ(0); /* 优化：强制硬件加速 */
             opacity: 0;
             pointer-events: none;
         }
@@ -271,6 +264,7 @@
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
             z-index: 999;
+            will-change: opacity; /* 优化：添加 will-change */
         }
 
         /* 对话框内容样式，现在完全依赖 glass-panel */
@@ -287,7 +281,8 @@
             border: 1px solid var(--glass-border);
             box-shadow: var(--glass-shadow);
             border-radius: 16px; /* 确保一致的圆角 */
-            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease; /* 优化：添加 transform 过渡 */
+            will-change: transform, opacity; /* 优化：添加 will-change */
         }
         /* Dark mode for dialog content */
         body.dark-mode .dialog-content {
@@ -295,6 +290,14 @@
             border: 1px solid var(--glass-border);
             box-shadow: var(--glass-shadow);
         }
+        /* 对话框显示时的 transform */
+        .dialog-overlay.opacity-100 .dialog-content {
+            transform: scale(1) translateZ(0); /* 优化：强制硬件加速 */
+        }
+        .dialog-overlay .dialog-content {
+            transform: scale(0.9) translateZ(0); /* 优化：强制硬件加速 */
+        }
+
 
         /* 标题 */
         .dialog-content h3 {
@@ -385,11 +388,12 @@
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
             min-width: 200px;
             overflow: hidden;
-            transform: scale(0.95);
+            transform: scale(0.95) translateZ(0); /* 优化：强制硬件加速 */
             opacity: 0;
             transition: transform 0.2s ease, opacity 0.2s ease;
             pointer-events: none;
             color: var(--text-primary);
+            will-change: transform, opacity; /* 优化：添加 will-change */
         }
         body.dark-mode .context-menu {
             background: rgba(45, 55, 72, 0.8); /* 暗模式下调整透明度 */
@@ -397,7 +401,7 @@
         }
 
         .context-menu.visible {
-            transform: scale(1);
+            transform: scale(1) translateZ(0); /* 优化：强制硬件加速 */
             opacity: 1;
             pointer-events: auto;
         }
@@ -431,12 +435,12 @@
             position: fixed;
             bottom: 80px;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translateX(-50%) translateZ(0); /* 优化：强制硬件加速 */
             display: flex;
             gap: 8px;
             background: rgba(79, 70, 229, 0.9); /* 保持原有透明度，因为颜色不同 */
-            backdrop-filter: blur(12px); /* 优化：降低模糊度 */
-            -webkit-backdrop-filter: blur(12px); /* 优化：降低模糊度 */
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.3);
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
             border-radius: 24px;
@@ -446,6 +450,7 @@
             opacity: 0;
             transition: opacity 0.3s ease;
             pointer-events: none;
+            will-change: transform, opacity; /* 优化：添加 will-change */
         }
         body.dark-mode .batch-toolbar {
             background: rgba(99, 102, 241, 0.9); /* 保持原有透明度，因为颜色不同 */
@@ -508,18 +513,19 @@
             top: 100%;
             margin-top: 8px;
             background: rgba(255, 255, 255, 0.8); /* 亮模式下调整透明度 */
-            backdrop-filter: blur(12px); /* 优化：降低模糊度 */
-            -webkit-backdrop-filter: blur(12px); /* 优化：降低模糊度 */
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(255, 255, 255, 0.4); /* 亮模式下提高边框透明度 */
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
             border-radius: 12px;
             min-width: 180px;
             z-index: 1100;
             opacity: 0;
-            transform: translateY(-10px);
+            transform: translateY(-10px) translateZ(0); /* 优化：强制硬件加速 */
             transition: all 0.2s ease;
             pointer-events: none;
             color: var(--text-primary);
+            will-change: transform, opacity; /* 优化：添加 will-change */
         }
         body.dark-mode .user-menu-content {
             background: rgba(45, 55, 72, 0.8); /* 暗模式下调整透明度 */
@@ -529,7 +535,7 @@
 
         .user-menu-content.show {
             opacity: 1;
-            transform: translateY(0);
+            transform: translateY(0) translateZ(0); /* 优化：强制硬件加速 */
             pointer-events: auto;
         }
 
@@ -643,6 +649,23 @@
         }
         #auth-screen a {
             color: var(--primary-color); /* 链接颜色 */
+        }
+
+        /* 移动端禁用文本选择 */
+        @media (max-width: 768px) {
+            body {
+                -webkit-user-select: none; /* Safari */
+                -moz-user-select: none;    /* Firefox */
+                -ms-user-select: none;     /* IE 10+ */
+                user-select: none;         /* Standard */
+            }
+            /* 允许输入框和文本区域选择 */
+            input, textarea {
+                -webkit-user-select: text;
+                -moz-user-select: text;
+                -ms-user-select: text;
+                user-select: text;
+            }
         }
     </style>
 </head>
@@ -2653,7 +2676,7 @@
                 // 显示上传进度
                 const progressToast = document.createElement('div');
                 progressToast.id = 'upload-progress';
-                progressToast.className = 'fixed bottom-20 left-1/2 transform -translate-x-50% glass-panel px-6 py-3 rounded-full text-sm font-medium';
+                progressToast.className = 'fixed bottom-20 left-1/2 transform -translate-x-1/2 glass-panel px-6 py-3 rounded-full text-sm font-medium';
                 progressToast.innerHTML = `准备上传 ${files.length} 个文件...`;
                 document.body.appendChild(progressToast);
 
