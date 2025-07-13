@@ -10,18 +10,140 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         /* CSS 变量定义，用于主题切换 */
-        :root {
-            --glass-bg: rgba(255, 255, 255, 0.8); /* 修改为亮模式下80%不透明度 */
-            --glass-border: rgba(255, 255, 255, 0.4); /* 提高边框透明度 */
-            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-            --glass-blur: blur(12px);
-            --primary-color: #4f46e5;
-            --text-primary: #1e293b;
-            --text-secondary: #475569;
-            --default-bg-color: #f3f4f6;
-            --default-gradient: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-            --bg-image: var(--default-gradient); /* 默认背景为渐变 */
-        }
+:root {
+    --glass-bg: rgba(255, 255, 255, 0.8); /* 修改为亮模式下80%不透明度 */
+    --glass-border: rgba(255, 255, 255, 0.4); /* 提高边框透明度 */
+    --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    --glass-blur: blur(12px);
+    --primary-color: #4f46e5;
+    --text-primary: #1e293b;
+    --text-secondary: #475569;
+    --default-bg-color: #f3f4f6;
+    --default-gradient: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    --bg-image: var(--default-gradient); /* 默认背景为渐变 */
+}
+
+/* 1. 针对毛玻璃效果相关变量：
+   --glass-bg, --glass-border, --glass-shadow, --glass-blur
+   这些变量通常用于创建玻璃卡片或容器。
+   `backdrop-filter` 和 `box-shadow` 是可以受益于 GPU 加速的属性。
+*/
+.glass-element {
+    /* 应用变量 */
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--glass-shadow);
+    backdrop-filter: var(--glass-blur); /* 实际进行模糊效果的属性 */
+    -webkit-backdrop-filter: var(--glass-blur); /* 兼容性前缀 */
+
+    /* 强制 GPU 加速提示：
+       will-change 提示浏览器这些属性可能发生变化，允许其提前优化。
+       transform: translateZ(0) 强制元素进入自己的合成层，从而可能利用 GPU。
+    */
+    will-change: transform, opacity, filter, box-shadow; /* 提示这些属性会变化 */
+    transform: translateZ(0); /* 强制创建一个独立的合成层 */
+
+    /* 示例样式 */
+    padding: 20px;
+    margin: 20px;
+    border-radius: 10px;
+    width: 300px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2em;
+    color: var(--text-primary);
+}
+
+/* 2. 针对主色调变量：--primary-color
+   这个颜色变量通常用于按钮、链接或高亮元素。
+   颜色本身不直接 GPU 加速，但如果元素会进行动画（如 `transform` 缩放），
+   那么整个元素的层可能会被 GPU 处理。
+*/
+.primary-interactive-element {
+    /* 应用变量 */
+    background-color: var(--primary-color);
+    color: white; /* 文本颜色通常是静态的，但为了示例，这里也包含 */
+
+    /* 强制 GPU 加速提示：
+       如果此元素会进行动画（例如悬停或点击效果），这些提示可能“有用”。
+    */
+    will-change: transform, opacity; /* 提示元素可能进行形变或透明度变化 */
+    transform: translateZ(0); /* 强制创建一个独立的合成层 */
+
+    /* 示例样式 */
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.2s ease-out; /* 配合 will-change 的动画示例 */
+}
+
+.primary-interactive-element:hover {
+    transform: scale(1.05); /* 实际触发 GPU 加速的属性 */
+}
+
+/* 3. 针对文本颜色变量：--text-primary, --text-secondary
+   文本颜色本身不直接 GPU 加速。
+   如果包含这些文本的元素会进行动画（如平移、淡入淡出），则可以考虑对其父元素或自身进行层提升。
+*/
+.text-container-primary {
+    /* 应用变量 */
+    color: var(--text-primary);
+    font-size: 2em;
+
+    /* 强制 GPU 加速提示：
+       对于静态文本，这通常是过度优化。仅当整个文本块会频繁移动或动画时才考虑。
+    */
+    will-change: transform, opacity; /* 提示文本容器可能进行形变或透明度变化 */
+    transform: translateZ(0); /* 强制创建一个独立的合成层 */
+
+    /* 示例样式 */
+    margin-bottom: 10px;
+}
+
+.text-container-secondary {
+    /* 应用变量 */
+    color: var(--text-secondary);
+    font-size: 1em;
+
+    /* 强制 GPU 加速提示：
+       同上，对于静态文本不推荐。
+    */
+    will-change: transform, opacity; /* 提示文本容器可能进行形变或透明度变化 */
+    transform: translateZ(0); /* 强制创建一个独立的合成层 */
+
+    /* 示例样式 */
+    line-height: 1.5;
+}
+
+/* 4. 针对背景变量：--default-bg-color, --default-gradient, --bg-image
+   这些变量用于页面的背景。
+   对 `body` 或大型容器使用 `will-change` 和 `transform: translateZ(0)` 是**非常不推荐的**，
+   因为它会将整个页面内容提升到一个合成层，这会消耗大量内存并可能导致性能问题。
+   这里仅为演示如何“强制”的示例。
+*/
+body {
+    /* 应用变量 */
+    background: var(--bg-image);
+
+    /* 强制 GPU 加速提示：
+       对整个 body 元素进行层提升通常是性能反模式。
+       浏览器通常会为整个页面内容创建一个主合成层。
+    */
+
+
+    /* 示例样式 */
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: sans-serif;
+}
 
         /* 夜间模式变量 */
         body.dark-mode {
@@ -53,13 +175,6 @@
             padding-bottom: 100px;
             margin: 0;
             transition: background-color 0.3s ease, color 0.3s ease; /* 平滑过渡 */
-            /* GPU 加速：提示浏览器这些属性会变化，以便优化渲染 */
-            will-change: color;
-            /* 禁用长按复制文字 */
-            -webkit-user-select: none; /* Safari */
-            -moz-user-select: none; /* Firefox */
-            -ms-user-select: none; /* IE/Edge */
-            user-select: none; /* Standard */
         }
 
         /* 毛玻璃效果基础类 */
@@ -71,7 +186,6 @@
             box-shadow: var(--glass-shadow);
             border-radius: 16px;
             transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-            will-change: background, border-color, box-shadow, transform; /* GPU 加速 */
         }
 
         /* 毛玻璃面板类，用于主要容器 */
@@ -83,7 +197,6 @@
             box-shadow: var(--glass-shadow); /* 使用变量 */
             border-radius: 16px; /* 确保圆角 */
             transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-            will-change: background, border-color, box-shadow, transform; /* GPU 加速 */
         }
         body.dark-mode .glass-panel {
             background: var(--glass-bg); /* 使用夜间模式变量 */
@@ -103,7 +216,6 @@
             cursor: pointer;
             color: var(--text-primary);
             font-weight: 500;
-            will-change: transform, box-shadow, background; /* GPU 加速 */
         }
 
         .glass-btn:hover {
@@ -155,12 +267,6 @@
             color: var(--text-primary);
             transition: all 0.3s ease;
             width: 100%;
-            will-change: background, border-color, box-shadow; /* GPU 加速 */
-            /* 允许文本选择 */
-            -webkit-user-select: text;
-            -moz-user-select: text;
-            -ms-user-select: text;
-            user-select: text;
         }
 
         .glass-input:focus {
@@ -194,7 +300,6 @@
             border-radius: 12px;
             transition: all 0.3s ease;
             cursor: pointer;
-            will-change: background, border-color, box-shadow, transform; /* GPU 加速 */
         }
 
         .file-item:hover {
@@ -263,7 +368,6 @@
             box-shadow: var(--glass-shadow);
             border-radius: 24px;
             transition: transform 0.3s ease, opacity 0.3s ease;
-            will-change: transform, opacity; /* GPU 加速 */
         }
         body.dark-mode .toolbar {
             background: var(--glass-bg);
@@ -283,8 +387,6 @@
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
             z-index: 999;
-            transition: opacity 0.3s ease; /* GPU 加速 */
-            will-change: opacity;
         }
 
         /* 对话框内容样式，现在完全依赖 glass-panel */
@@ -301,8 +403,7 @@
             border: 1px solid var(--glass-border);
             box-shadow: var(--glass-shadow);
             border-radius: 16px; /* 确保一致的圆角 */
-            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-            will-change: background, border-color, box-shadow, transform; /* GPU 加速 */
+            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
         }
         /* Dark mode for dialog content */
         body.dark-mode .dialog-content {
@@ -359,7 +460,6 @@
 
         .animate-spin {
             animation: spin 1s linear infinite;
-            will-change: transform; /* GPU 加速 */
         }
 
         /* 面包屑导航 */
@@ -375,7 +475,6 @@
             cursor: pointer;
             transition: color 0.2s;
             color: var(--text-secondary); /* 面包屑项颜色 */
-            will-change: color; /* GPU 加速 */
         }
 
         .breadcrumb-item:hover {
@@ -407,11 +506,10 @@
             transition: transform 0.2s ease, opacity 0.2s ease;
             pointer-events: none;
             color: var(--text-primary);
-            will-change: transform, opacity; /* GPU 加速 */
         }
         body.dark-mode .context-menu {
             background: rgba(45, 55, 72, 0.8); /* 暗模式下调整透明度 */
-            box-shadow: 0 44px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
         .context-menu.visible {
@@ -426,7 +524,6 @@
             display: flex;
             align-items: center;
             transition: background 0.2s;
-            will-change: background; /* GPU 加速 */
         }
 
         .context-menu-item:hover {
@@ -465,7 +562,6 @@
             opacity: 0;
             transition: opacity 0.3s ease;
             pointer-events: none;
-            will-change: transform, opacity; /* GPU 加速 */
         }
         body.dark-mode .batch-toolbar {
             background: rgba(99, 102, 241, 0.9); /* 保持原有透明度，因为颜色不同 */
@@ -488,7 +584,6 @@
             display: flex;
             align-items: center;
             transition: all 0.2s;
-            will-change: background; /* GPU 加速 */
         }
         body.dark-mode .batch-toolbar-btn {
             background: rgba(30, 30, 30, 0.8); /* 暗模式下提高透明度 */
@@ -541,7 +636,6 @@
             transition: all 0.2s ease;
             pointer-events: none;
             color: var(--text-primary);
-            will-change: transform, opacity; /* GPU 加速 */
         }
         body.dark-mode .user-menu-content {
             background: rgba(45, 55, 72, 0.8); /* 暗模式下调整透明度 */
@@ -561,7 +655,6 @@
             display: flex;
             align-items: center;
             transition: background 0.2s;
-            will-change: background; /* GPU 加速 */
         }
 
         .user-menu-item:hover {
@@ -647,7 +740,6 @@
             z-index: 1050; /* 确保它在所有对话框和工具栏之上 */
             white-space: pre-wrap; /* 允许换行，优化文字显示 */
             text-align: center;
-            will-change: transform, opacity; /* GPU 加速 */
         }
 
         /* 确保文件列表项的元数据文本能够正常换行 */
@@ -667,11 +759,6 @@
         }
         #auth-screen a {
             color: var(--primary-color); /* 链接颜色 */
-            /* 允许链接文本选择 */
-            -webkit-user-select: text;
-            -moz-user-select: text;
-            -ms-user-select: text;
-            user-select: text;
         }
     </style>
 </head>
