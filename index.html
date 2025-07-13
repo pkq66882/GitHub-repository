@@ -23,24 +23,18 @@
             z-index: 1000;
         }
         
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-            color: var(--text-primary);
-            min-height: 100vh;
-            padding-bottom: 100px;
-            margin: 0;
-            background-attachment: fixed;
-            /* --- GPU Acceleration & Disable Text Selection --- */
-            transform: translateZ(0); /* Force GPU acceleration */
-            will-change: transform; /* Hint to browser for transform changes */
-            -webkit-user-select: none; /* Disable text selection for WebKit browsers */
-            -moz-user-select: none;    /* Disable text selection for Firefox */
-            -ms-user-select: none;     /* Disable text selection for IE/Edge */
-            user-select: none;         /* Standard property to disable text selection */
-            -webkit-touch-callout: none; /* Disable callout on long-press for iOS */
-            /* ------------------------------------------------ */
-        }
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+    color: var(--text-primary);
+    min-height: 100vh;
+    padding-bottom: 100px;
+    margin: 0;
+    background-attachment: fixed;
+    /* --- GPU 加速 --- */
+    transform: translateZ(0); /* 强制 GPU 加速 */
+    will-change: transform; /* 提示浏览器进行 transform 的优化 */
+}
         
         /* 毛玻璃效果 */
         .glass {
@@ -275,6 +269,13 @@
         word-break: break-all !important;
         white-space: normal !important;
         }
+.no-copy {
+        user-select: none !important;
+        -webkit-user-select: none !important;
+        -moz-user-select: none !important;
+        -ms-user-select: none !important;
+        -webkit-touch-callout: none !important;
+    }
         }
         
         /* 加载动画 */
