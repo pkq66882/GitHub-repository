@@ -11,8 +11,8 @@
     <style>
         /* CSS 变量定义，用于主题切换 */
 :root {
-    --glass-bg: rgba(255, 255, 255, 0.8); /* 修改为亮模式下80%不透明度 */
-    --glass-border: rgba(255, 255, 255, 0.4); /* 提高边框透明度 */
+    --glass-bg: rgba(255, 255, 255, 0.8);
+    --glass-border: rgba(255, 255, 255, 0.4);
     --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
     --glass-blur: blur(12px);
     --primary-color: #4f46e5;
@@ -20,129 +20,252 @@
     --text-secondary: #475569;
     --default-bg-color: #f3f4f6;
     --default-gradient: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-    --bg-image: var(--default-gradient); /* 默认背景为渐变 */
+    --bg-image: var(--default-gradient);
 }
 
-/* 1. 针对毛玻璃效果相关变量：
-   --glass-bg, --glass-border, --glass-shadow, --glass-blur
-   这些变量通常用于创建玻璃卡片或容器。
-   `backdrop-filter` 和 `box-shadow` 是可以受益于 GPU 加速的属性。
+/* ==================================================================== */
+/* 1. 针对变量：--glass-bg */
+/* 这个变量通常用于元素的背景色。当背景色与 `backdrop-filter` 或 `box-shadow` 结合时，
+   整个元素可能会受益于 GPU 加速。
 */
-.glass-element {
-    /* 应用变量 */
-    background: var(--glass-bg);
-    border: 1px solid var(--glass-border);
-    box-shadow: var(--glass-shadow);
-    backdrop-filter: var(--glass-blur); /* 实际进行模糊效果的属性 */
-    -webkit-backdrop-filter: var(--glass-blur); /* 兼容性前缀 */
+.element-using-glass-bg {
+    background: var(--glass-bg); /* 使用 --glass-bg */
+    border: 1px solid rgba(0,0,0,0.1); /* 示例边框 */
+    padding: 20px;
+    margin: 10px;
+    border-radius: 8px;
+    width: 200px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1em;
+    color: #333;
 
     /* 强制 GPU 加速提示：
-       will-change 提示浏览器这些属性可能发生变化，允许其提前优化。
-       transform: translateZ(0) 强制元素进入自己的合成层，从而可能利用 GPU。
+       提示浏览器此元素可能进行 transform, opacity, filter 变化，
+       并强制创建一个独立的合成层。
     */
-    will-change: transform, opacity, filter, box-shadow; /* 提示这些属性会变化 */
-    transform: translateZ(0); /* 强制创建一个独立的合成层 */
+    will-change: transform, opacity, filter;
+    transform: translateZ(0);
+}
 
-    /* 示例样式 */
+/* ==================================================================== */
+/* 2. 针对变量：--glass-border */
+/* 这个变量通常用于元素的边框颜色。边框本身不直接 GPU 加速，但如果元素有动画，
+   整个元素的层会被 GPU 处理。
+*/
+.element-using-glass-border {
+    border: 2px solid var(--glass-border); /* 使用 --glass-border */
     padding: 20px;
-    margin: 20px;
-    border-radius: 10px;
+    margin: 10px;
+    border-radius: 8px;
+    width: 200px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1em;
+    color: #333;
+    background-color: #f9f9f9;
+
+    /* 强制 GPU 加速提示：
+       提示浏览器此元素可能进行 transform, opacity, filter 变化，
+       并强制创建一个独立的合成层。
+    */
+    will-change: transform, opacity, filter;
+    transform: translateZ(0);
+}
+
+/* ==================================================================== */
+/* 3. 针对变量：--glass-shadow */
+/* 这个变量用于元素的阴影。`box-shadow` 属性在某些情况下可以受益于 GPU 加速。
+*/
+.element-using-glass-shadow {
+    box-shadow: var(--glass-shadow); /* 使用 --glass-shadow */
+    background-color: white;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 8px;
+    width: 200px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1em;
+    color: #333;
+
+    /* 强制 GPU 加速提示：
+       提示浏览器此元素可能进行 transform, opacity, box-shadow 变化，
+       并强制创建一个独立的合成层。
+    */
+    will-change: transform, opacity, box-shadow;
+    transform: translateZ(0);
+}
+
+/* ==================================================================== */
+/* 4. 针对变量：--glass-blur */
+/* 这个变量用于 `backdrop-filter` 属性。`backdrop-filter` 属性是 GPU 加速的常见候选。
+*/
+.element-using-glass-blur {
+    background: rgba(255, 255, 255, 0.5); /* 需要一个半透明背景才能看到模糊效果 */
+    backdrop-filter: var(--glass-blur); /* 使用 --glass-blur */
+    -webkit-backdrop-filter: var(--glass-blur); /* 兼容性前缀 */
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 20px;
+    margin: 10px;
+    border-radius: 8px;
+    width: 200px;
+    height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1em;
+    color: #333;
+
+    /* 强制 GPU 加速提示：
+       提示浏览器此元素可能进行 transform, opacity, filter 变化，
+       并强制创建一个独立的合成层。
+    */
+    will-change: transform, opacity, filter;
+    transform: translateZ(0);
+}
+
+/* ==================================================================== */
+/* 5. 针对变量：--primary-color */
+/* 这个变量通常用于按钮、链接的背景色或文本色。颜色本身不直接 GPU 加速，
+   但如果元素有动画（如 `transform` 缩放），整个元素的层会被 GPU 处理。
+*/
+.element-using-primary-color {
+    background-color: var(--primary-color); /* 使用 --primary-color */
+    color: white;
+    padding: 10px 20px;
+    margin: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.2s ease-out; /* 示例动画 */
+
+    /* 强制 GPU 加速提示：
+       提示浏览器此元素可能进行 transform, opacity 变化，
+       并强制创建一个独立的合成层。
+    */
+    will-change: transform, opacity;
+    transform: translateZ(0);
+}
+
+.element-using-primary-color:hover {
+    transform: scale(1.05); /* 实际触发 GPU 加速的属性 */
+}
+
+/* ==================================================================== */
+/* 6. 针对变量：--text-primary */
+/* 这个变量用于主要文本颜色。文本颜色本身不直接 GPU 加速。
+   如果包含文本的元素会进行动画，则可以对其进行层提升。
+*/
+.element-using-text-primary {
+    color: var(--text-primary); /* 使用 --text-primary */
+    font-size: 1.8em;
+    margin: 10px;
+    padding: 5px;
+
+    /* 强制 GPU 加速提示：
+       对于静态文本，这通常是过度优化。仅当整个文本块会频繁移动或动画时才考虑。
+    */
+    will-change: transform, opacity;
+    transform: translateZ(0);
+}
+
+/* ==================================================================== */
+/* 7. 针对变量：--text-secondary */
+/* 这个变量用于辅助文本颜色。同上，文本颜色本身不直接 GPU 加速。
+*/
+.element-using-text-secondary {
+    color: var(--text-secondary); /* 使用 --text-secondary */
+    font-size: 1em;
+    line-height: 1.5;
+    margin: 10px;
+    padding: 5px;
+
+    /* 强制 GPU 加速提示：
+       对于静态文本，这通常是过度优化。
+    */
+    will-change: transform, opacity;
+    transform: translateZ(0);
+}
+
+/* ==================================================================== */
+/* 8. 针对变量：--default-bg-color */
+/* 这个变量用于默认背景色。背景色本身不直接 GPU 加速。
+   如果整个页面或大型容器使用此背景色，并且该容器有动画，则可以考虑层提升。
+*/
+.element-using-default-bg-color {
+    background-color: var(--default-bg-color); /* 使用 --default-bg-color */
+    padding: 30px;
+    margin: 10px;
+    border-radius: 12px;
     width: 300px;
     height: 150px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.2em;
-    color: var(--text-primary);
+    color: #555;
+
+    /* 强制 GPU 加速提示：
+       如果此大型容器有动画，则此提示有用。
+    */
+    will-change: transform, opacity;
+    transform: translateZ(0);
 }
 
-/* 2. 针对主色调变量：--primary-color
-   这个颜色变量通常用于按钮、链接或高亮元素。
-   颜色本身不直接 GPU 加速，但如果元素会进行动画（如 `transform` 缩放），
-   那么整个元素的层可能会被 GPU 处理。
+/* ==================================================================== */
+/* 9. 针对变量：--default-gradient */
+/* 这个变量用于默认渐变背景。渐变本身不直接 GPU 加速。
+   如果整个页面或大型容器使用此背景，并且该容器有动画，则可以考虑层提升。
 */
-.primary-interactive-element {
-    /* 应用变量 */
-    background-color: var(--primary-color);
-    color: white; /* 文本颜色通常是静态的，但为了示例，这里也包含 */
+.element-using-default-gradient {
+    background: var(--default-gradient); /* 使用 --default-gradient */
+    padding: 30px;
+    margin: 10px;
+    border-radius: 12px;
+    width: 300px;
+    height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2em;
+    color: #333; /* 确保文本可见 */
 
     /* 强制 GPU 加速提示：
-       如果此元素会进行动画（例如悬停或点击效果），这些提示可能“有用”。
+       如果此大型容器有动画，则此提示有用。
     */
-    will-change: transform, opacity; /* 提示元素可能进行形变或透明度变化 */
-    transform: translateZ(0); /* 强制创建一个独立的合成层 */
-
-    /* 示例样式 */
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: transform 0.2s ease-out; /* 配合 will-change 的动画示例 */
+    will-change: transform, opacity;
+    transform: translateZ(0);
 }
 
-.primary-interactive-element:hover {
-    transform: scale(1.05); /* 实际触发 GPU 加速的属性 */
-}
-
-/* 3. 针对文本颜色变量：--text-primary, --text-secondary
-   文本颜色本身不直接 GPU 加速。
-   如果包含这些文本的元素会进行动画（如平移、淡入淡出），则可以考虑对其父元素或自身进行层提升。
-*/
-.text-container-primary {
-    /* 应用变量 */
-    color: var(--text-primary);
-    font-size: 2em;
-
-    /* 强制 GPU 加速提示：
-       对于静态文本，这通常是过度优化。仅当整个文本块会频繁移动或动画时才考虑。
-    */
-    will-change: transform, opacity; /* 提示文本容器可能进行形变或透明度变化 */
-    transform: translateZ(0); /* 强制创建一个独立的合成层 */
-
-    /* 示例样式 */
-    margin-bottom: 10px;
-}
-
-.text-container-secondary {
-    /* 应用变量 */
-    color: var(--text-secondary);
-    font-size: 1em;
-
-    /* 强制 GPU 加速提示：
-       同上，对于静态文本不推荐。
-    */
-    will-change: transform, opacity; /* 提示文本容器可能进行形变或透明度变化 */
-    transform: translateZ(0); /* 强制创建一个独立的合成层 */
-
-    /* 示例样式 */
-    line-height: 1.5;
-}
-
-/* 4. 针对背景变量：--default-bg-color, --default-gradient, --bg-image
-   这些变量用于页面的背景。
-   对 `body` 或大型容器使用 `will-change` 和 `transform: translateZ(0)` 是**非常不推荐的**，
-   因为它会将整个页面内容提升到一个合成层，这会消耗大量内存并可能导致性能问题。
-   这里仅为演示如何“强制”的示例。
+/* ==================================================================== */
+/* 10. 针对变量：--bg-image */
+/* 这个变量用于背景图片（这里是渐变）。背景图片本身不直接 GPU 加速。
+    通常用于 body 或大型容器。
 */
 body {
-    /* 应用变量 */
-    background: var(--bg-image);
-
-    /* 强制 GPU 加速提示：
-       对整个 body 元素进行层提升通常是性能反模式。
-       浏览器通常会为整个页面内容创建一个主合成层。
-    */
-
-
-    /* 示例样式 */
+    background: var(--bg-image); /* 使用 --bg-image */
     margin: 0;
-    padding: 0;
+    padding: 20px; /* 增加内边距以便看到内容 */
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start; /* 从顶部开始排列 */
     font-family: sans-serif;
+    gap: 20px; /* 元素之间的间距 */
+
+    /* 强制 GPU 加速提示：
+       对整个 body 元素进行层提升通常是性能反模式。
+       浏览器通常会为整个页面内容创建一个主合成层。
+       这里仅为满足“单独的”要求而演示。
+    */
+
 }
 
         /* 夜间模式变量 */
