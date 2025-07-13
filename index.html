@@ -5,9 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GitHub 文件管理器</title>
     <!-- Tailwind CSS CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https/cdn.tailwindcss.com"></script>
     <!-- Font Awesome CDN -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https/cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         /* CSS 变量定义，用于主题切换 */
         :root {
@@ -53,6 +53,14 @@
             padding-bottom: 100px;
             margin: 0;
             transition: background-color 0.3s ease, color 0.3s ease; /* 平滑过渡 */
+
+            /* 禁用长按复制文字功能 */
+            -webkit-touch-callout: none; /* iOS Safari */
+            -webkit-user-select: none;   /* Safari */
+            -khtml-user-select: none;    /* Konqueror HTML */
+            -moz-user-select: none;      /* Old versions of Firefox */
+            -ms-user-select: none;       /* Internet Explorer/Edge */
+            user-select: none;           /* Non-prefixed version */
         }
 
         /* 毛玻璃效果基础类 */
@@ -64,6 +72,7 @@
             box-shadow: var(--glass-shadow);
             border-radius: 16px;
             transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            will-change: transform, opacity; /* GPU 加速 */
         }
 
         /* 毛玻璃面板类，用于主要容器 */
@@ -75,6 +84,7 @@
             box-shadow: var(--glass-shadow); /* 使用变量 */
             border-radius: 16px; /* 确保圆角 */
             transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            will-change: transform, opacity; /* GPU 加速 */
         }
         body.dark-mode .glass-panel {
             background: var(--glass-bg); /* 使用夜间模式变量 */
@@ -94,6 +104,7 @@
             cursor: pointer;
             color: var(--text-primary);
             font-weight: 500;
+            will-change: transform, box-shadow; /* GPU 加速 */
         }
 
         .glass-btn:hover {
@@ -145,6 +156,11 @@
             color: var(--text-primary);
             transition: all 0.3s ease;
             width: 100%;
+            /* 重新启用文本选择功能 */
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
         }
 
         .glass-input:focus {
@@ -178,6 +194,7 @@
             border-radius: 12px;
             transition: all 0.3s ease;
             cursor: pointer;
+            will-change: transform, background, box-shadow; /* GPU 加速 */
         }
 
         .file-item:hover {
@@ -246,6 +263,7 @@
             box-shadow: var(--glass-shadow);
             border-radius: 24px;
             transition: transform 0.3s ease, opacity 0.3s ease;
+            will-change: transform, opacity; /* GPU 加速 */
         }
         body.dark-mode .toolbar {
             background: var(--glass-bg);
@@ -265,6 +283,7 @@
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
             z-index: 999;
+            will-change: opacity; /* GPU 加速 */
         }
 
         /* 对话框内容样式，现在完全依赖 glass-panel */
@@ -281,7 +300,8 @@
             border: 1px solid var(--glass-border);
             box-shadow: var(--glass-shadow);
             border-radius: 16px; /* 确保一致的圆角 */
-            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease; /* Added transform for transition */
+            will-change: transform, opacity; /* GPU 加速 */
         }
         /* Dark mode for dialog content */
         body.dark-mode .dialog-content {
@@ -384,6 +404,7 @@
             transition: transform 0.2s ease, opacity 0.2s ease;
             pointer-events: none;
             color: var(--text-primary);
+            will-change: transform, opacity; /* GPU 加速 */
         }
         body.dark-mode .context-menu {
             background: rgba(45, 55, 72, 0.8); /* 暗模式下调整透明度 */
@@ -440,6 +461,7 @@
             opacity: 0;
             transition: opacity 0.3s ease;
             pointer-events: none;
+            will-change: transform, opacity; /* GPU 加速 */
         }
         body.dark-mode .batch-toolbar {
             background: rgba(99, 102, 241, 0.9); /* 保持原有透明度，因为颜色不同 */
@@ -514,6 +536,7 @@
             transition: all 0.2s ease;
             pointer-events: none;
             color: var(--text-primary);
+            will-change: transform, opacity; /* GPU 加速 */
         }
         body.dark-mode .user-menu-content {
             background: rgba(45, 55, 72, 0.8); /* 暗模式下调整透明度 */
@@ -618,6 +641,7 @@
             z-index: 1050; /* 确保它在所有对话框和工具栏之上 */
             white-space: pre-wrap; /* 允许换行，优化文字显示 */
             text-align: center;
+            will-change: opacity; /* GPU 加速 */
         }
 
         /* 确保文件列表项的元数据文本能够正常换行 */
@@ -637,32 +661,6 @@
         }
         #auth-screen a {
             color: var(--primary-color); /* 链接颜色 */
-        }
-
-        /* 移动端强制 GPU 加速和禁用长按复制 */
-        @media (max-width: 768px) {
-            body {
-                -webkit-user-select: none; /* 禁用文本选择 */
-                user-select: none; /* 禁用文本选择 */
-                -webkit-touch-callout: none; /* 禁用长按弹出菜单 */
-                -webkit-tap-highlight-color: transparent; /* 移除点击高亮 */
-                transform: translateZ(0); /* 强制 GPU 加速 */
-                -webkit-transform: translateZ(0); /* 强制 GPU 加速 */
-                will-change: transform; /* 性能优化 */
-            }
-            /* 对主要可交互/动画元素应用 GPU 加速 */
-            #main-screen,
-            .glass-panel,
-            .toolbar,
-            .batch-toolbar,
-            .context-menu,
-            .dialog-overlay,
-            .dialog-content,
-            .user-menu-content {
-                transform: translateZ(0);
-                -webkit-transform: translateZ(0);
-                will-change: transform;
-            }
         }
     </style>
 </head>
@@ -702,7 +700,7 @@
                 <p class="font-medium mb-2">如何获取 Token？</p>
                 <ol class="list-decimal pl-5 space-y-1">
                     <li>登录 GitHub 账户</li>
-                    <li>访问 <a href="https://github.com/settings/tokens" target="_blank" class="text-blue-500 hover:underline">开发者设置</a></li>
+                    <li>访问 <a href="https/github.com/settings/tokens" target="_blank" class="text-blue-500 hover:underline">开发者设置</a></li>
                     <li>创建新的个人访问令牌</li>
                     <li>勾选 `repo` 权限</li>
                 </ol>
@@ -960,7 +958,7 @@
 
             <div class="mb-4">
                 <label class="block mb-2 font-medium">背景图片 URL (留空使用默认)</label>
-                <input type="url" id="bg-image-input" placeholder="https://bing.img.run/uhd.php" class="glass-input mb-2">
+                <input type="url" id="bg-image-input" placeholder="https/bing.img.run/uhd.php" class="glass-input mb-2">
                 <div class="flex gap-2">
                     <button id="apply-bg-btn" class="glass-btn glass-btn-primary flex-1 py-2">应用背景</button>
                     <button id="reset-bg-btn" class="glass-btn flex-1 py-2">重置背景</button>
@@ -996,7 +994,7 @@
         // 配置项
         const SCROLL_DELAY = 3000; // 滚动停止后显示工具栏的延迟时间(ms)
         const SCROLL_THRESHOLD = 10; // 滚动距离阈值(px)，小于此值不处理
-        const DEFAULT_BG_IMAGE_URL = 'https://bing.img.run/uhd.php'; // 默认背景图片URL
+        const DEFAULT_BG_IMAGE_URL = 'https/bing.img.run/uhd.php'; // 默认背景图片URL
         
         // 外观设置状态
         let currentBgImage = localStorage.getItem('bg_image') || `url("${DEFAULT_BG_IMAGE_URL}")`;
@@ -1409,7 +1407,7 @@
                 if (contextMenuTarget && contextMenuTarget.type === 'file') {
                     const [owner, repoName] = currentRepo.split('/');
                     const filePath = currentPath ? `${currentPath}/${contextMenuTarget.name}` : contextMenuTarget.name;
-                    const jsdelivrLink = `https://cdn.jsdelivr.net/gh/${owner}/${repoName}@main/${filePath}`;
+                    const jsdelivrLink = `https/cdn.jsdelivr.net/gh/${owner}/${repoName}@main/${filePath}`;
                     copyToClipboard(jsdelivrLink, 'jsDelivr CDN 链接已复制');
                 }
                 hideContextMenu();
@@ -1822,7 +1820,7 @@
                 const timeoutId = setTimeout(() => controller.abort(), 10000);
                 
                 // 发送验证请求
-                const response = await fetch('https://api.github.com/user', {
+                const response = await fetch('https/api.github.com/user', {
                     signal: controller.signal,
                     headers: {
                         'Authorization': `token ${token}`,
@@ -1951,7 +1949,7 @@
             
             try {
                 // 使用GraphQL API获取仓库列表
-                const response = await fetch('https://api.github.com/graphql', {
+                const response = await fetch('https/api.github.com/graphql', {
                     method: 'POST',
                     headers: {
                         'Authorization': `bearer ${githubToken}`,
@@ -2021,7 +2019,7 @@
             
             try {
                 // 使用GraphQL API获取仓库内容
-                const response = await fetch('https://api.github.com/graphql', {
+                const response = await fetch('https/api.github.com/graphql', {
                     method: 'POST',
                     headers: {
                         'Authorization': `bearer ${githubToken}`,
@@ -2068,7 +2066,7 @@
                     size: entry.object?.byteSize || 0,
                     path: path ? `${path}/${entry.name}` : entry.name,
                     download_url: entry.type === 'blob' ? 
-                        `https://raw.githubusercontent.com/${repo}/${'main'}/${path ? path + '/' : ''}${entry.name}` : null
+                        `https/raw.githubusercontent.com/${repo}/${'main'}/${path ? path + '/' : ''}${entry.name}` : null
                 }));
                 
                 currentFiles = contents;
@@ -2263,7 +2261,7 @@
                         if (item.type === 'file') {
                             const [owner, repoName] = currentRepo.split('/');
                             const filePath = currentPath ? `${currentPath}/${item.name}` : item.name;
-                            const jsdelivrLink = `https://cdn.jsdelivr.net/gh/${owner}/${repoName}@main/${filePath}`;
+                            const jsdelivrLink = `https/cdn.jsdelivr.net/gh/${owner}/${repoName}@main/${filePath}`;
                             copyToClipboard(jsdelivrLink, 'jsDelivr CDN 链接已复制');
                         }
                     });
@@ -2379,7 +2377,7 @@
                 
                 // 获取文件SHA
                 const shaResponse = await fetch(
-                    `https://api.github.com/repos/${currentRepo}/contents/${currentPath ? currentPath + '/' : ''}${fileInfo.name}`,
+                    `https/api.github.com/repos/${currentRepo}/contents/${currentPath ? currentPath + '/' : ''}${fileInfo.name}`,
                     {
                         headers: {
                             'Authorization': `token ${githubToken}`,
@@ -2397,7 +2395,7 @@
 
                 // 删除文件
                 const deleteResponse = await fetch(
-                    `https://api.github.com/repos/${currentRepo}/contents/${currentPath ? currentPath + '/' : ''}${fileInfo.name}`,
+                    `https/api.github.com/repos/${currentRepo}/contents/${currentPath ? currentPath + '/' : ''}${fileInfo.name}`,
                     {
                         method: 'DELETE',
                         headers: {
@@ -2435,7 +2433,7 @@
                     try {
                         // 获取文件SHA
                         const shaResponse = await fetch(
-                            `https://api.github.com/repos/${currentRepo}/contents/${currentPath ? currentPath + '/' : ''}${file.name}`,
+                            `https/api.github.com/repos/${currentRepo}/contents/${currentPath ? currentPath + '/' : ''}${file.name}`,
                             {
                                 headers: {
                                     'Authorization': `token ${githubToken}`,
@@ -2453,7 +2451,7 @@
 
                         // 删除文件
                         const deleteResponse = await fetch(
-                            `https://api.github.com/repos/${currentRepo}/contents/${currentPath ? currentPath + '/' : ''}${file.name}`,
+                            `https/api.github.com/repos/${currentRepo}/contents/${currentPath ? currentPath + '/' : ''}${file.name}`,
                             {
                                 method: 'DELETE',
                                 headers: {
@@ -2498,7 +2496,7 @@
             try {
                 const [owner, repoName] = repoInfo.path.split('/');
                 
-                const response = await fetch(`https://api.github.com/repos/${owner}/${repoName}`, {
+                const response = await fetch(`https/api.github.com/repos/${owner}/${repoName}`, {
                     method: 'DELETE',
                     headers: {
                         'Authorization': `token ${githubToken}`,
@@ -2526,7 +2524,7 @@
                 const filePath = currentPath ? `${currentPath}/${folderName}/.gitkeep` : `${folderName}/.gitkeep`;
                 const content = btoa(''); // 空内容
                 
-                const response = await fetch(`https://api.github.com/repos/${currentRepo}/contents/${filePath}`, {
+                const response = await fetch(`https/api.github.com/repos/${currentRepo}/contents/${filePath}`, {
                     method: 'PUT',
                     headers: {
                         'Authorization': `token ${githubToken}`,
@@ -2554,7 +2552,7 @@
         // 创建仓库
         async function createRepository(name, description, isPrivate) {
             try {
-                const response = await fetch('https://api.github.com/user/repos', {
+                const response = await fetch('https/api.github.com/user/repos', {
                     method: 'POST',
                     headers: {
                         'Authorization': `token ${githubToken}`,
@@ -2586,7 +2584,7 @@
             try {
                 // 获取文件内容
                 const contentResponse = await fetch(
-                    `https://api.github.com/repos/${currentRepo}/contents/${currentPath ? currentPath + '/' : ''}${fileInfo.name}`,
+                    `https/api.github.com/repos/${currentRepo}/contents/${currentPath ? currentPath + '/' : ''}${fileInfo.name}`,
                     {
                         headers: {
                             'Authorization': `token ${githubToken}`,
@@ -2610,7 +2608,7 @@
                 
                 // 删除原文件
                 const deleteResponse = await fetch(
-                    `https://api.github.com/repos/${currentRepo}/contents/${currentPath ? currentPath + '/' : ''}${fileInfo.name}`,
+                    `https/api.github.com/repos/${currentRepo}/contents/${currentPath ? currentPath + '/' : ''}${fileInfo.name}`,
                     {
                         method: 'DELETE',
                         headers: {
@@ -2630,7 +2628,7 @@
                 
                 // 创建新文件
                 const createResponse = await fetch(
-                    `https://api.github.com/repos/${currentRepo}/contents/${currentPath ? currentPath + '/' : ''}${newName}`,
+                    `https/api.github.com/repos/${currentRepo}/contents/${currentPath ? currentPath + '/' : ''}${newName}`,
                     {
                         method: 'PUT',
                         headers: {
@@ -2750,7 +2748,7 @@
                 
                 // 5. 执行上传
                 const response = await fetch(
-                    `https://api.github.com/repos/${currentRepo}/contents/${encodedPath}`,
+                    `https/api.github.com/repos/${currentRepo}/contents/${encodedPath}`,
                     {
                         method: 'PUT',
                         headers: {
@@ -2801,7 +2799,7 @@
         async function getFileShaIfExists(filePath) {
             try {
                 const response = await fetch(
-                    `https://api.github.com/repos/${currentRepo}/contents/${filePath}?ref=main`, // Always check 'main' branch for existence
+                    `https/api.github.com/repos/${currentRepo}/contents/${filePath}?ref=main`, // Always check 'main' branch for existence
                     {
                         headers: {
                             'Authorization': `token ${githubToken}`,
@@ -2932,7 +2930,7 @@
         async function checkPagesStatus(repo) {
             try {
                 const [owner, repoName] = repo.split('/');
-                const response = await fetch(`https://api.github.com/repos/${owner}/${repoName}/pages`, {
+                const response = await fetch(`https/api.github.com/repos/${owner}/${repoName}/pages`, {
                     headers: {
                         'Authorization': `token ${githubToken}`,
                         'Accept': 'application/vnd.github.v3+json'
@@ -2965,7 +2963,7 @@
                 const branch = pagesBranch.value;
                 const path = pagesFolder.value === '/docs' ? '/docs' : '/';
                 
-                const response = await fetch(`https://api.github.com/repos/${owner}/${repoName}/pages`, {
+                const response = await fetch(`https/api.github.com/repos/${owner}/${repoName}/pages`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `token ${githubToken}`,
@@ -3007,7 +3005,7 @@
             try {
                 const [owner, repoName] = repo.split('/');
                 
-                const response = await fetch(`https://api.github.com/repos/${owner}/${repoName}/pages`, {
+                const response = await fetch(`https/api.github.com/repos/${owner}/${repoName}/pages`, {
                     method: 'DELETE',
                     headers: {
                         'Authorization': `token ${githubToken}`,
