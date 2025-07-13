@@ -640,29 +640,19 @@
         }
 @media(max-width: 480px) {
     /* 只在关键元素上启用GPU加速，避免影响整体布局 */
-    #main-screen,
-    #auth-screen,
-    .top-nav,
-    .file-list,
-    .toolbar,
-    .batch-toolbar,
-    .dialog-overlay,
-    .dialog-content,
-    .breadcrumb,
-    .context-menu,
-    #toast,
-    #batch-toolbar {
+            .glass,
+            .file-item,
+            .toolbar,
+            .breadcrumb,
+            .batch-toolbar,
+            .animate-spin,
+            .batch-toolbar-btn,
+            .dialog-content,
+            .dialog-overlay,
+                   {
         /* 开启GPU硬件加速 */
         transform: translateZ(0);
     }
-    /* 禁用长按文本复制（只影响文本的选择） */
-    body {
-        user-select: none;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-    }
-}
     </style>
 </head>
 <body class="min-h-screen p-4 md:p-6">
