@@ -53,15 +53,6 @@
             padding-bottom: 100px;
             margin: 0;
             transition: background-color 0.3s ease, color 0.3s ease; /* 平滑过渡 */
-            
-            /* --- 优化项：强制 GPU 加速 --- */
-            transform: translateZ(0);
-            /* --- 优化项：禁用长按复制文字 --- */
-            -webkit-user-select: none; /* Safari */
-            -moz-user-select: none; /* Firefox */
-            -ms-user-select: none; /* IE/Edge */
-            user-select: none; /* Standard */
-            -webkit-touch-callout: none; /* iOS Safari */
         }
 
         /* 毛玻璃效果基础类 */
@@ -103,8 +94,6 @@
             cursor: pointer;
             color: var(--text-primary);
             font-weight: 500;
-            /* --- 优化项：GPU 加速 --- */
-            will-change: transform, background, box-shadow;
         }
 
         .glass-btn:hover {
@@ -189,14 +178,12 @@
             border-radius: 12px;
             transition: all 0.3s ease;
             cursor: pointer;
-            /* --- 优化项：GPU 加速 --- */
-            will-change: transform, background, box-shadow;
         }
 
         .file-item:hover {
+            background: rgba(255, 255, 255, 0.9); /* 亮模式下悬停时更高透明度 */
             transform: translateY(-2px);
             box-shadow: 0 6px 20px 0 rgba(31, 38, 135, 0.1);
-            background: rgba(255, 255, 255, 0.9); /* 亮模式下悬停时更高透明度 */
         }
 
         .file-item.selected {
@@ -259,8 +246,6 @@
             box-shadow: var(--glass-shadow);
             border-radius: 24px;
             transition: transform 0.3s ease, opacity 0.3s ease;
-            /* --- 优化项：GPU 加速 --- */
-            will-change: transform, opacity;
         }
         body.dark-mode .toolbar {
             background: var(--glass-bg);
@@ -280,8 +265,6 @@
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
             z-index: 999;
-            /* --- 优化项：GPU 加速 --- */
-            will-change: opacity;
         }
 
         /* 对话框内容样式，现在完全依赖 glass-panel */
@@ -299,8 +282,6 @@
             box-shadow: var(--glass-shadow);
             border-radius: 16px; /* 确保一致的圆角 */
             transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-            /* --- 优化项：GPU 加速 --- */
-            will-change: transform;
         }
         /* Dark mode for dialog content */
         body.dark-mode .dialog-content {
@@ -403,8 +384,6 @@
             transition: transform 0.2s ease, opacity 0.2s ease;
             pointer-events: none;
             color: var(--text-primary);
-            /* --- 优化项：GPU 加速 --- */
-            will-change: transform, opacity;
         }
         body.dark-mode .context-menu {
             background: rgba(45, 55, 72, 0.8); /* 暗模式下调整透明度 */
@@ -461,8 +440,6 @@
             opacity: 0;
             transition: opacity 0.3s ease;
             pointer-events: none;
-            /* --- 优化项：GPU 加速 --- */
-            will-change: opacity, transform;
         }
         body.dark-mode .batch-toolbar {
             background: rgba(99, 102, 241, 0.9); /* 保持原有透明度，因为颜色不同 */
@@ -485,8 +462,6 @@
             display: flex;
             align-items: center;
             transition: all 0.2s;
-            /* --- 优化项：GPU 加速 --- */
-            will-change: background, box-shadow;
         }
         body.dark-mode .batch-toolbar-btn {
             background: rgba(30, 30, 30, 0.8); /* 暗模式下提高透明度 */
@@ -539,8 +514,6 @@
             transition: all 0.2s ease;
             pointer-events: none;
             color: var(--text-primary);
-            /* --- 优化项：GPU 加速 --- */
-            will-change: transform, opacity;
         }
         body.dark-mode .user-menu-content {
             background: rgba(45, 55, 72, 0.8); /* 暗模式下调整透明度 */
@@ -645,8 +618,6 @@
             z-index: 1050; /* 确保它在所有对话框和工具栏之上 */
             white-space: pre-wrap; /* 允许换行，优化文字显示 */
             text-align: center;
-            /* --- 优化项：GPU 加速 --- */
-            will-change: opacity, transform;
         }
 
         /* 确保文件列表项的元数据文本能够正常换行 */
@@ -666,6 +637,32 @@
         }
         #auth-screen a {
             color: var(--primary-color); /* 链接颜色 */
+        }
+
+        /* 移动端强制 GPU 加速和禁用长按复制 */
+        @media (max-width: 768px) {
+            body {
+                -webkit-user-select: none; /* 禁用文本选择 */
+                user-select: none; /* 禁用文本选择 */
+                -webkit-touch-callout: none; /* 禁用长按弹出菜单 */
+                -webkit-tap-highlight-color: transparent; /* 移除点击高亮 */
+                transform: translateZ(0); /* 强制 GPU 加速 */
+                -webkit-transform: translateZ(0); /* 强制 GPU 加速 */
+                will-change: transform; /* 性能优化 */
+            }
+            /* 对主要可交互/动画元素应用 GPU 加速 */
+            #main-screen,
+            .glass-panel,
+            .toolbar,
+            .batch-toolbar,
+            .context-menu,
+            .dialog-overlay,
+            .dialog-content,
+            .user-menu-content {
+                transform: translateZ(0);
+                -webkit-transform: translateZ(0);
+                will-change: transform;
+            }
         }
     </style>
 </head>
