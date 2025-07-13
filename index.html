@@ -14,7 +14,7 @@
             --glass-bg: rgba(255, 255, 255, 0.8); /* 修改为亮模式下80%不透明度 */
             --glass-border: rgba(255, 255, 255, 0.4); /* 提高边框透明度 */
             --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-            --glass-blur: blur(12px);
+            --glass-blur: blur(12px); /* 默认桌面端毛玻璃模糊度 */
             --primary-color: #4f46e5;
             --text-primary: #1e293b;
             --text-secondary: #475569;
@@ -53,19 +53,6 @@
             padding-bottom: 100px;
             margin: 0;
             transition: background-color 0.3s ease, color 0.3s ease; /* 平滑过渡 */
-            /* 优化：禁用文字选择（长按复制） */
-            -webkit-user-select: none; /* Safari */
-            -moz-user-select: none;    /* Firefox */
-            -ms-user-select: none;     /* IE 10+ */
-            user-select: none;         /* Standard */
-        }
-
-        /* 优化：允许输入框文字选择 */
-        input, textarea {
-            -webkit-user-select: text;
-            -moz-user-select: text;
-            -ms-user-select: text;
-            user-select: text;
         }
 
         /* 毛玻璃效果基础类 */
@@ -77,8 +64,6 @@
             box-shadow: var(--glass-shadow);
             border-radius: 16px;
             transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-            /* 优化：will-change 属性 */
-            will-change: background, border-color, box-shadow;
         }
 
         /* 毛玻璃面板类，用于主要容器 */
@@ -90,8 +75,6 @@
             box-shadow: var(--glass-shadow); /* 使用变量 */
             border-radius: 16px; /* 确保圆角 */
             transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-            /* 优化：will-change 属性 */
-            will-change: background, border-color, box-shadow, transform, opacity;
         }
         body.dark-mode .glass-panel {
             background: var(--glass-bg); /* 使用夜间模式变量 */
@@ -111,8 +94,7 @@
             cursor: pointer;
             color: var(--text-primary);
             font-weight: 500;
-            /* 优化：will-change 属性 */
-            will-change: transform, box-shadow, background;
+            will-change: transform, background, box-shadow; /* 优化动画性能 */
         }
 
         .glass-btn:hover {
@@ -164,8 +146,7 @@
             color: var(--text-primary);
             transition: all 0.3s ease;
             width: 100%;
-            /* 优化：will-change 属性 */
-            will-change: background, border-color, box-shadow;
+            will-change: box-shadow, background; /* 优化动画性能 */
         }
 
         .glass-input:focus {
@@ -199,8 +180,7 @@
             border-radius: 12px;
             transition: all 0.3s ease;
             cursor: pointer;
-            /* 优化：will-change 属性 */
-            will-change: transform, background, border-color, box-shadow;
+            will-change: transform, background, box-shadow; /* 优化动画性能 */
         }
 
         .file-item:hover {
@@ -269,8 +249,7 @@
             box-shadow: var(--glass-shadow);
             border-radius: 24px;
             transition: transform 0.3s ease, opacity 0.3s ease;
-            /* 优化：will-change 属性 */
-            will-change: transform, opacity;
+            will-change: transform, opacity; /* 优化动画性能 */
         }
         body.dark-mode .toolbar {
             background: var(--glass-bg);
@@ -290,8 +269,8 @@
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
             z-index: 999;
-            /* 优化：will-change 属性 */
-            will-change: opacity;
+            transition: opacity 0.3s ease; /* 确保过渡效果 */
+            will-change: opacity; /* 优化动画性能 */
         }
 
         /* 对话框内容样式，现在完全依赖 glass-panel */
@@ -308,9 +287,8 @@
             border: 1px solid var(--glass-border);
             box-shadow: var(--glass-shadow);
             border-radius: 16px; /* 确保一致的圆角 */
-            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-            /* 优化：will-change 属性 */
-            will-change: background, border-color, box-shadow, transform;
+            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease; /* 添加transform过渡 */
+            will-change: transform, opacity; /* 优化动画性能 */
         }
         /* Dark mode for dialog content */
         body.dark-mode .dialog-content {
@@ -413,8 +391,7 @@
             transition: transform 0.2s ease, opacity 0.2s ease;
             pointer-events: none;
             color: var(--text-primary);
-            /* 优化：will-change 属性 */
-            will-change: transform, opacity;
+            will-change: transform, opacity; /* 优化动画性能 */
         }
         body.dark-mode .context-menu {
             background: rgba(45, 55, 72, 0.8); /* 暗模式下调整透明度 */
@@ -471,8 +448,7 @@
             opacity: 0;
             transition: opacity 0.3s ease;
             pointer-events: none;
-            /* 优化：will-change 属性 */
-            will-change: opacity;
+            will-change: opacity; /* 优化动画性能 */
         }
         body.dark-mode .batch-toolbar {
             background: rgba(99, 102, 241, 0.9); /* 保持原有透明度，因为颜色不同 */
@@ -547,8 +523,7 @@
             transition: all 0.2s ease;
             pointer-events: none;
             color: var(--text-primary);
-            /* 优化：will-change 属性 */
-            will-change: transform, opacity;
+            will-change: transform, opacity; /* 优化动画性能 */
         }
         body.dark-mode .user-menu-content {
             background: rgba(45, 55, 72, 0.8); /* 暗模式下调整透明度 */
@@ -587,6 +562,28 @@
         }
 
         /* 响应式调整 */
+        @media (max-width: 768px) { /* 针对移动设备的通用断点 */
+            body {
+                /* 禁用移动端文本复制 */
+                -webkit-user-select: none; /* Safari */
+                -moz-user-select: none;    /* Firefox */
+                -ms-user-select: none;     /* IE 10+ */
+                user-select: none;         /* Standard */
+            }
+            /* 允许输入框、文本区域和选择框的文本选择 */
+            input, textarea, select {
+                -webkit-user-select: text;
+                -moz-user-select: text;
+                -ms-user-select: text;
+                user-select: text;
+            }
+
+            /* 降低移动端毛玻璃模糊度以提升性能 */
+            :root {
+                --glass-blur: blur(6px); 
+            }
+        }
+
         @media (max-width: 640px) {
             .glass {
                 border-radius: 12px;
@@ -653,8 +650,8 @@
             z-index: 1050; /* 确保它在所有对话框和工具栏之上 */
             white-space: pre-wrap; /* 允许换行，优化文字显示 */
             text-align: center;
-            /* 优化：will-change 属性 */
-            will-change: opacity;
+            transition: opacity 0.3s ease; /* 确保过渡效果 */
+            will-change: opacity; /* 优化动画性能 */
         }
 
         /* 确保文件列表项的元数据文本能够正常换行 */
