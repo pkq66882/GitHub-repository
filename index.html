@@ -39,7 +39,6 @@
         .top-nav {
             position: relative;
             z-index: 1000;
-            will-change: transform, opacity; /* Hint for animation */
         }
 
         body {
@@ -54,21 +53,6 @@
             padding-bottom: 100px;
             margin: 0;
             transition: background-color 0.3s ease, color 0.3s ease; /* 平滑过渡 */
-            /* 禁用文本选择和复制 */
-            -webkit-touch-callout: none; /* iOS Safari */
-            -webkit-user-select: none; /* Safari */
-            -khtml-user-select: none; /* Konqueror HTML */
-            -moz-user-select: none; /* Old versions of Firefox */
-            -ms-user-select: none; /* Internet Explorer/Edge */
-            user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
-        }
-
-        /* 允许输入框中的文本选择 */
-        input, textarea {
-            -webkit-user-select: text;
-            -moz-user-select: text;
-            -ms-user-select: text;
-            user-select: text;
         }
 
         /* 毛玻璃效果基础类 */
@@ -80,7 +64,6 @@
             box-shadow: var(--glass-shadow);
             border-radius: 16px;
             transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-            will-change: background, border-color, box-shadow; /* Hint for animation */
         }
 
         /* 毛玻璃面板类，用于主要容器 */
@@ -92,7 +75,6 @@
             box-shadow: var(--glass-shadow); /* 使用变量 */
             border-radius: 16px; /* 确保圆角 */
             transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-            will-change: background, border-color, box-shadow, transform, opacity; /* Hint for animation */
         }
         body.dark-mode .glass-panel {
             background: var(--glass-bg); /* 使用夜间模式变量 */
@@ -112,7 +94,6 @@
             cursor: pointer;
             color: var(--text-primary);
             font-weight: 500;
-            will-change: transform, box-shadow, background; /* Hint for animation */
         }
 
         .glass-btn:hover {
@@ -164,7 +145,6 @@
             color: var(--text-primary);
             transition: all 0.3s ease;
             width: 100%;
-            will-change: background, border-color, box-shadow; /* Hint for animation */
         }
 
         .glass-input:focus {
@@ -198,7 +178,6 @@
             border-radius: 12px;
             transition: all 0.3s ease;
             cursor: pointer;
-            will-change: transform, box-shadow, background; /* Hint for animation */
         }
 
         .file-item:hover {
@@ -267,7 +246,6 @@
             box-shadow: var(--glass-shadow);
             border-radius: 24px;
             transition: transform 0.3s ease, opacity 0.3s ease;
-            will-change: transform, opacity; /* Hint for animation */
         }
         body.dark-mode .toolbar {
             background: var(--glass-bg);
@@ -287,7 +265,6 @@
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
             z-index: 999;
-            will-change: opacity; /* Hint for animation */
         }
 
         /* 对话框内容样式，现在完全依赖 glass-panel */
@@ -304,8 +281,7 @@
             border: 1px solid var(--glass-border);
             box-shadow: var(--glass-shadow);
             border-radius: 16px; /* 确保一致的圆角 */
-            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
-            will-change: transform, opacity, background, border-color, box-shadow; /* Hint for animation */
+            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
         }
         /* Dark mode for dialog content */
         body.dark-mode .dialog-content {
@@ -362,7 +338,6 @@
 
         .animate-spin {
             animation: spin 1s linear infinite;
-            will-change: transform; /* Hint for animation */
         }
 
         /* 面包屑导航 */
@@ -378,7 +353,6 @@
             cursor: pointer;
             transition: color 0.2s;
             color: var(--text-secondary); /* 面包屑项颜色 */
-            will-change: color; /* Hint for animation */
         }
 
         .breadcrumb-item:hover {
@@ -410,7 +384,6 @@
             transition: transform 0.2s ease, opacity 0.2s ease;
             pointer-events: none;
             color: var(--text-primary);
-            will-change: transform, opacity; /* Hint for animation */
         }
         body.dark-mode .context-menu {
             background: rgba(45, 55, 72, 0.8); /* 暗模式下调整透明度 */
@@ -429,7 +402,6 @@
             display: flex;
             align-items: center;
             transition: background 0.2s;
-            will-change: background; /* Hint for animation */
         }
 
         .context-menu-item:hover {
@@ -468,7 +440,6 @@
             opacity: 0;
             transition: opacity 0.3s ease;
             pointer-events: none;
-            will-change: opacity, transform; /* Hint for animation */
         }
         body.dark-mode .batch-toolbar {
             background: rgba(99, 102, 241, 0.9); /* 保持原有透明度，因为颜色不同 */
@@ -491,7 +462,6 @@
             display: flex;
             align-items: center;
             transition: all 0.2s;
-            will-change: background; /* Hint for animation */
         }
         body.dark-mode .batch-toolbar-btn {
             background: rgba(30, 30, 30, 0.8); /* 暗模式下提高透明度 */
@@ -544,7 +514,6 @@
             transition: all 0.2s ease;
             pointer-events: none;
             color: var(--text-primary);
-            will-change: transform, opacity; /* Hint for animation */
         }
         body.dark-mode .user-menu-content {
             background: rgba(45, 55, 72, 0.8); /* 暗模式下调整透明度 */
@@ -564,7 +533,6 @@
             display: flex;
             align-items: center;
             transition: background 0.2s;
-            will-change: background; /* Hint for animation */
         }
 
         .user-menu-item:hover {
@@ -650,7 +618,6 @@
             z-index: 1050; /* 确保它在所有对话框和工具栏之上 */
             white-space: pre-wrap; /* 允许换行，优化文字显示 */
             text-align: center;
-            will-change: opacity; /* Hint for animation */
         }
 
         /* 确保文件列表项的元数据文本能够正常换行 */
@@ -1537,11 +1504,67 @@
                     isTicking = true;
                 }
             });
+
+            // --- Event Delegation for fileListElement ---
+            fileListElement.addEventListener('click', (e) => {
+                const fileItemElement = e.target.closest('.file-item');
+                if (!fileItemElement) return;
+
+                const itemName = fileItemElement.dataset.name;
+                const itemType = fileItemElement.dataset.type;
+                // Find the actual item object from currentFiles based on name and type
+                // For repos, also check fullPath to ensure uniqueness
+                const item = currentFiles.find(f => 
+                    f.name === itemName && 
+                    ((f.type === itemType) || (f.type === 'repo' && itemType === 'repo' && f.path === fileItemElement.dataset.fullPath))
+                ); 
+
+                if (!item) return;
+
+                if (batchToolbar.classList.contains('visible')) {
+                    e.stopPropagation();
+                    toggleFileSelection(fileItemElement, item);
+                    return;
+                }
+                
+                if (item.type === 'dir') {
+                    loadRepositoryContents(currentRepo, `${currentPath ? currentPath + '/' : ''}${item.name}`);
+                } else if (item.type === 'repo') {
+                    loadRepositoryContents(item.path);
+                } else if (item.type === 'file' && item.download_url) {
+                    window.open(item.download_url, '_blank');
+                }
+            });
+
+            fileListElement.addEventListener('contextmenu', (e) => {
+                const fileItemElement = e.target.closest('.file-item');
+                if (!fileItemElement) return;
+
+                const itemName = fileItemElement.dataset.name;
+                const itemType = fileItemElement.dataset.type;
+                // Find the actual item object from currentFiles based on name and type
+                // For repos, also check fullPath to ensure uniqueness
+                const item = currentFiles.find(f => 
+                    f.name === itemName && 
+                    ((f.type === itemType) || (f.type === 'repo' && itemType === 'repo' && f.path === fileItemElement.dataset.fullPath))
+                ); 
+
+                if (item) {
+                    showContextMenu(e, item);
+                }
+            });
+            // --- End Event Delegation ---
         
             // 初始显示工具栏
             showToolbar();
         });
         
+        // -------------------- 辅助函数 --------------------
+        function isMobileDevice() {
+            // Using matchMedia for better responsiveness detection
+            return window.matchMedia('(max-width: 768px)').matches;
+        }
+
         // -------------------- 外观设置相关函数 --------------------
         
         // 切换日夜模式
@@ -1730,8 +1753,15 @@
             contextOpen.style.display = fileInfo.type === 'dir' || fileInfo.type === 'repo' ? 'flex' : 'none';
             contextDownload.style.display = fileInfo.type === 'file' ? 'flex' : 'none';
             contextRename.style.display = fileInfo.type === 'file' || fileInfo.type === 'dir' ? 'flex' : 'none';
-            contextCopyLink.style.display = fileInfo.type === 'file' ? 'flex' : 'none';
-            contextCopyProxyLink.style.display = fileInfo.type === 'file' ? 'flex' : 'none';
+            
+            // 复制链接功能在移动端禁用
+            if (isMobileDevice()) {
+                contextCopyLink.style.display = 'none';
+                contextCopyProxyLink.style.display = 'none';
+            } else {
+                contextCopyLink.style.display = fileInfo.type === 'file' ? 'flex' : 'none';
+                contextCopyProxyLink.style.display = fileInfo.type === 'file' ? 'flex' : 'none';
+            }
             
             // 静态网站选项：仅对仓库或特定文件夹显示
             // 启用 Pages: 如果是仓库，或者在仓库内部且是 'docs' 文件夹
@@ -2055,6 +2085,9 @@
                                 }
                             }
                         `
+                        // Fallback to REST API for full file details if needed
+                        // This GraphQL query is efficient for listing, but for download_url, a REST call might be simpler.
+                        // For now, I'll construct download_url manually as it's a common pattern.
                     })
                 });
                 
@@ -2078,7 +2111,7 @@
                         `https://raw.githubusercontent.com/${repo}/${'main'}/${path ? path + '/' : ''}${entry.name}` : null
                 }));
                 
-                currentFiles = contents;
+                currentFiles = contents; // Store the actual file objects for event delegation lookup
                 
                 const sortedContents = [...contents].sort((a, b) => {
                     if (a.type === b.type) {
@@ -2106,37 +2139,32 @@
             }
         }
         
-        // 更新面包屑导航 (优化版：使用 DocumentFragment)
+        // 更新面包屑导航
         function updateBreadcrumb(parts) {
             const breadcrumbContainer = currentPathElement.querySelector('.breadcrumb');
             breadcrumbContainer.innerHTML = '';
             
-            const fragment = document.createDocumentFragment();
-
             // 添加"我的仓库"根路径
             const rootItem = document.createElement('div');
             rootItem.className = 'breadcrumb-item';
             rootItem.innerHTML = '<i class="fab fa-github mr-1"></i><span>我的仓库</span>';
             rootItem.onclick = () => loadRepositories();
-            fragment.appendChild(rootItem);
+            breadcrumbContainer.appendChild(rootItem);
             
-            if (parts.length === 0) {
-                breadcrumbContainer.appendChild(fragment);
-                return;
-            }
+            if (parts.length === 0) return;
             
             // 添加分隔符
             const separator = document.createElement('div');
             separator.className = 'breadcrumb-separator';
             separator.innerHTML = '<i class="fas fa-chevron-right"></i>';
-            fragment.appendChild(separator);
+            breadcrumbContainer.appendChild(separator);
             
             // 添加仓库部分
             const repoItem = document.createElement('div');
             repoItem.className = 'breadcrumb-item';
             repoItem.textContent = parts[0];
             repoItem.onclick = () => loadRepositoryContents(parts[0]);
-            fragment.appendChild(repoItem);
+            breadcrumbContainer.appendChild(repoItem);
             
             // 添加路径部分
             let currentPath = parts[0];
@@ -2147,18 +2175,17 @@
                 const pathSeparator = document.createElement('div');
                 pathSeparator.className = 'breadcrumb-separator';
                 pathSeparator.innerHTML = '<i class="fas fa-chevron-right"></i>';
-                fragment.appendChild(pathSeparator);
+                breadcrumbContainer.appendChild(pathSeparator);
                 
                 // 添加路径项
                 const pathItem = document.createElement('div');
                 pathItem.className = 'breadcrumb-item';
                 pathItem.textContent = parts[i];
-                pathItem.onclick = () => {
-                    loadRepositoryContents(parts[0], parts.slice(1, i + 1).join('/'));
-                };
-                fragment.appendChild(pathItem);
+                // Store the full path for this breadcrumb item to allow navigation
+                const fullPathForClick = parts.slice(1, i + 1).join('/');
+                pathItem.onclick = ((repo, path) => () => loadRepositoryContents(repo, path))(parts[0], fullPathForClick);
+                breadcrumbContainer.appendChild(pathItem);
             }
-            breadcrumbContainer.appendChild(fragment);
         }
         
         // 获取文件图标
@@ -2167,7 +2194,7 @@
             return fileTypeIcons[extension] || 'fas fa-file text-gray-400';
         }
         
-        // 渲染文件列表 (优化版：使用 DocumentFragment)
+        // 渲染文件列表 (Optimized with DocumentFragment and conditional copy buttons)
         function renderFileList(items) {
             fileListElement.innerHTML = '';
             loadingElement.classList.add('hidden');
@@ -2179,51 +2206,33 @@
             }
             
             fileListElement.classList.remove('hidden');
-            
-            const fragment = document.createDocumentFragment(); // Create a document fragment
 
+            const fragment = document.createDocumentFragment(); // Use DocumentFragment for performance
+            
             items.forEach(item => {
                 const fileItem = document.createElement('div');
                 fileItem.className = 'file-item p-4 flex items-center';
+                // Store data attributes for event delegation
                 fileItem.dataset.name = item.name;
                 fileItem.dataset.type = item.type;
-                
-                // 添加右键菜单
-                fileItem.addEventListener('contextmenu', (e) => {
-                    showContextMenu(e, item);
-                });
-                
-                // 添加选择模式点击处理
-                fileItem.addEventListener('click', (e) => {
-                    if (batchToolbar.classList.contains('visible')) {
-                        e.stopPropagation();
-                        toggleFileSelection(fileItem, item);
-                        return;
-                    }
-                    
-                    if (item.type === 'dir') {
-                        loadRepositoryContents(currentRepo, `${currentPath ? currentPath + '/' : ''}${item.name}`);
-                    } else if (item.type === 'repo') {
-                        loadRepositoryContents(item.path);
-                    } else if (item.type === 'file' && item.download_url) {
-                        window.open(item.download_url, '_blank');
-                    }
-                });
+                // For repos, store the full path to distinguish from other items with same name
+                if (item.type === 'repo') {
+                    fileItem.dataset.fullPath = item.path; 
+                }
                 
                 const icon = document.createElement('i');
                 icon.className = `file-icon ${item.type === 'dir' ? 'fas fa-folder folder-icon' : 
-                                     item.type === 'repo' ? 'fab fa-github github-repo-icon' : /* 修改：使用新的 github-repo-icon 类 */
+                                     item.type === 'repo' ? 'fab fa-github github-repo-icon' : 
                                      getFileIcon(item.name)}`;
                 
                 const infoContainer = document.createElement('div');
                 infoContainer.className = 'flex-1 min-w-0';
                 
                 const name = document.createElement('div');
-                name.className = 'font-medium truncate'; /* Keep truncate for name, as names are usually short or meant to be truncated */
+                name.className = 'font-medium truncate';
                 name.textContent = item.name;
                 
                 const meta = document.createElement('div');
-                // Removed 'truncate' class, added 'file-meta-text' for specific styling to ensure wrapping
                 meta.className = 'text-xs text-gray-500 dark:text-gray-400 file-meta-text'; 
                 
                 if (item.type === 'repo') {
@@ -2251,8 +2260,9 @@
                     const deleteBtn = document.createElement('button');
                     deleteBtn.className = 'glass-btn p-2 ml-2';
                     deleteBtn.innerHTML = '<i class="fas fa-trash text-red-500"></i>';
+                    deleteBtn.title = '删除文件';
                     deleteBtn.addEventListener('click', (e) => {
-                        e.stopPropagation();
+                        e.stopPropagation(); // Prevent file item click
                         showConfirmDialog(
                             '确认删除',
                             `您确定要删除文件 "${item.name}" 吗？此操作不可撤销。`,
@@ -2260,30 +2270,31 @@
                         );
                     });
 
-                    const copyRawLinkBtn = document.createElement('button');
-                    copyRawLinkBtn.className = 'glass-btn p-2 ml-2';
-                    copyRawLinkBtn.innerHTML = '<i class="fas fa-link text-blue-500"></i>';
-                    copyRawLinkBtn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        if (item.type === 'file') {
+                    // Conditionally add copy buttons based on mobile detection
+                    if (!isMobileDevice()) {
+                        const copyRawLinkBtn = document.createElement('button');
+                        copyRawLinkBtn.className = 'glass-btn p-2 ml-2';
+                        copyRawLinkBtn.innerHTML = '<i class="fas fa-link text-blue-500"></i>';
+                        copyRawLinkBtn.title = '复制 Raw 链接';
+                        copyRawLinkBtn.addEventListener('click', (e) => {
+                            e.stopPropagation();
                             copyToClipboard(item.download_url, 'Raw 链接已复制');
-                        }
-                    });
+                        });
 
-                    const copyProxyLinkBtn = document.createElement('button');
-                    copyProxyLinkBtn.className = 'glass-btn p-2 ml-2';
-                    copyProxyLinkBtn.innerHTML = '<i class="fas fa-share-alt text-green-500"></i>';
-                    copyProxyLinkBtn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        if (item.type === 'file') {
+                        const copyProxyLinkBtn = document.createElement('button');
+                        copyProxyLinkBtn.className = 'glass-btn p-2 ml-2';
+                        copyProxyLinkBtn.innerHTML = '<i class="fas fa-share-alt text-green-500"></i>';
+                        copyProxyLinkBtn.title = '复制 jsDelivr CDN 链接';
+                        copyProxyLinkBtn.addEventListener('click', (e) => {
+                            e.stopPropagation();
                             const [owner, repoName] = currentRepo.split('/');
                             const filePath = currentPath ? `${currentPath}/${item.name}` : item.name;
                             const jsdelivrLink = `https://cdn.jsdelivr.net/gh/${owner}/${repoName}@main/${filePath}`;
                             copyToClipboard(jsdelivrLink, 'jsDelivr CDN 链接已复制');
-                        }
-                    });
-                    actionContainer.appendChild(copyProxyLinkBtn);
-                    actionContainer.appendChild(copyRawLinkBtn);
+                        });
+                        actionContainer.appendChild(copyProxyLinkBtn);
+                        actionContainer.appendChild(copyRawLinkBtn);
+                    }
                     actionContainer.appendChild(deleteBtn);
                 }
                 
@@ -2291,7 +2302,7 @@
                 fileItem.appendChild(infoContainer);
                 fileItem.appendChild(actionContainer);
                 
-                fragment.appendChild(fileItem); // Append to fragment instead of directly to DOM
+                fragment.appendChild(fileItem); // Append to fragment
             });
             fileListElement.appendChild(fragment); // Append fragment to DOM once
         }
@@ -2300,7 +2311,19 @@
         function toggleFileSelection(fileItem, fileInfo) {
             if (fileItem.classList.contains('selected')) {
                 fileItem.classList.remove('selected');
-                selectedFiles.delete(fileInfo);
+                // Use a unique identifier for Set, e.g., a combined path string
+                const uniqueId = `${fileInfo.type}-${fileInfo.path || fileInfo.name}`;
+                selectedFiles.delete(fileInfo); // Still store the object, but check by ID
+                
+                // Remove from selectedFiles Set by comparing unique ID or reference
+                let found = false;
+                for (let sf of selectedFiles) {
+                    if ((sf.type === fileInfo.type) && (sf.path === fileInfo.path || sf.name === fileInfo.name)) {
+                        selectedFiles.delete(sf);
+                        found = true;
+                        break;
+                    }
+                }
             } else {
                 fileItem.classList.add('selected');
                 selectedFiles.add(fileInfo);
@@ -2360,8 +2383,12 @@
             showToast(`已开始下载 ${file.name}`);
         }
         
-        // 复制到剪贴板
+        // 复制到剪贴板 (Modified for mobile)
         function copyToClipboard(text, successMessage) {
+            if (isMobileDevice()) {
+                showToast('移动端不支持复制功能');
+                return;
+            }
             navigator.clipboard.writeText(text).then(() => {
                 showToast(successMessage);
             }).catch((error) => {
@@ -2600,7 +2627,7 @@
         // 重命名文件
         async function renameFile(fileInfo) {
             try {
-                // 获取文件内容
+                // Get the current file content and SHA
                 const contentResponse = await fetch(
                     `https://api.github.com/repos/${currentRepo}/contents/${currentPath ? currentPath + '/' : ''}${fileInfo.name}`,
                     {
@@ -2617,14 +2644,18 @@
                 
                 const contentData = await contentResponse.json();
                 const sha = contentData.sha;
-                const content = contentData.content;
-                const encoding = contentData.encoding;
+                const content = contentData.content; // Base64 encoded content
+                // const encoding = contentData.encoding; // Usually 'base64'
                 
-                // 提示用户输入新文件名
+                // Prompt user for new name
                 const newName = prompt('请输入新的文件名:', fileInfo.name);
-                if (!newName || newName === fileInfo.name) return;
-                
-                // 删除原文件
+                if (!newName || newName.trim() === fileInfo.name) {
+                    showToast('重命名已取消或文件名未改变');
+                    return;
+                }
+                const trimmedNewName = newName.trim();
+
+                // Delete the old file
                 const deleteResponse = await fetch(
                     `https://api.github.com/repos/${currentRepo}/contents/${currentPath ? currentPath + '/' : ''}${fileInfo.name}`,
                     {
@@ -2634,19 +2665,20 @@
                             'Accept': 'application/vnd.github.v3+json'
                         },
                         body: JSON.stringify({
-                            message: `Rename ${fileInfo.name} to ${newName}`,
-                            sha: sha
+                            message: `Rename ${fileInfo.name} to ${trimmedNewName}`,
+                            sha: sha // SHA of the file to be deleted
                         })
                     }
                 );
                 
                 if (!deleteResponse.ok) {
-                    throw new Error('删除原文件失败');
+                    const errorData = await deleteResponse.json();
+                    throw new Error(errorData.message || '删除原文件失败');
                 }
                 
-                // 创建新文件
+                // Create the new file with the old content
                 const createResponse = await fetch(
-                    `https://api.github.com/repos/${currentRepo}/contents/${currentPath ? currentPath + '/' : ''}${newName}`,
+                    `https://api.github.com/repos/${currentRepo}/contents/${currentPath ? currentPath + '/' : ''}${trimmedNewName}`,
                     {
                         method: 'PUT',
                         headers: {
@@ -2654,9 +2686,9 @@
                             'Accept': 'application/vnd.github.v3+json'
                         },
                         body: JSON.stringify({
-                            message: `Rename ${fileInfo.name} to ${newName}`,
-                            content: content,
-                            encoding: encoding
+                            message: `Rename ${fileInfo.name} to ${trimmedNewName}`,
+                            content: content, // Use the original content
+                            // encoding: encoding // Should be 'base64'
                         })
                     }
                 );
@@ -2725,9 +2757,7 @@
                 }
 
                 // 移除进度提示
-                if (document.body.contains(progressToast)) {
-                    document.body.removeChild(progressToast);
-                }
+                document.body.removeChild(progressToast);
                 
                 // 显示最终结果
                 if (failedUploads === 0) {
@@ -2805,13 +2835,16 @@
                 const reader = new FileReader();
                 reader.onload = () => {
                     const arrayBuffer = reader.result;
+                    // Use TextDecoder to handle various encodings if necessary, or assume UTF-8 for typical text files
+                    // For binary files, btoa(String.fromCharCode(...new Uint8Array(arrayBuffer))) is common.
+                    // However, for general purpose, it's safer to convert ArrayBuffer to a binary string first.
                     const binaryString = Array.from(new Uint8Array(arrayBuffer))
                         .map(b => String.fromCharCode(b))
                         .join('');
                     resolve(btoa(binaryString));
                 };
                 reader.onerror = () => reject(new Error('文件读取失败'));
-                reader.readAsArrayBuffer(file);
+                reader.readAsArrayBuffer(file); // Read as ArrayBuffer for binary safety
             });
         }
 
@@ -2824,7 +2857,7 @@
                         headers: {
                             'Authorization': `token ${githubToken}`,
                             'Accept': 'application/vnd.github.v3+json',
-                            'Cache-Control': 'no-cache'
+                            'Cache-Control': 'no-cache' // Ensure fresh data
                         }
                     }
                 );
@@ -2833,19 +2866,24 @@
                     const data = await response.json();
                     return data.sha;
                 } else if (response.status === 404) {
-                    return null; // 文件不存在
+                    return null; // File does not exist
                 } else {
                     const errorData = await response.json();
                     throw new Error(errorData.message || '检查文件状态失败');
                 }
             } catch (error) {
                 console.error('获取SHA错误:', error);
-                throw error;
+                // Do not rethrow if it's a 404, just return null. Rethrow other errors.
+                if (error.message && error.message.includes('检查文件状态失败')) {
+                    throw error;
+                }
+                return null; 
             }
         }
 
         // 辅助函数：编码GitHub路径
         function encodeGitHubPath(path) {
+            // Encode each segment separately to preserve slashes
             return path.split('/').map(encodeURIComponent).join('/');
         }
         
