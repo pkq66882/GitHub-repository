@@ -14,7 +14,7 @@
             --glass-bg: rgba(255, 255, 255, 0.8); /* 修改为亮模式下80%不透明度 */
             --glass-border: rgba(255, 255, 255, 0.4); /* 提高边框透明度 */
             --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
-            --glass-blur: blur(12px);
+            --glass-blur: blur(10px); /* 优化：降低模糊度以提升性能 */
             --primary-color: #4f46e5;
             --text-primary: #1e293b;
             --text-secondary: #475569;
@@ -28,6 +28,7 @@
             --glass-bg: rgba(30, 30, 30, 0.8); /* 修改为暗模式下80%不透明度 */
             --glass-border: rgba(255, 255, 255, 0.2); /* 提高边框透明度 */
             --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            --glass-blur: blur(10px); /* 优化：降低模糊度以提升性能 */
             --primary-color: #6366f1; /* 适应夜间模式的强调色 */
             --text-primary: #a0aec0; /* 修改：与 --text-secondary 保持一致 */
             --text-secondary: #a0aec0; /* 已是此值 */
@@ -53,6 +54,11 @@
             padding-bottom: 100px;
             margin: 0;
             transition: background-color 0.3s ease, color 0.3s ease; /* 平滑过渡 */
+            /* 禁用文字选择功能，尤其在移动端 */
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* IE10+/Edge */
+            user-select: none; /* Standard */
         }
 
         /* 毛玻璃效果基础类 */
@@ -85,8 +91,8 @@
         /* 按钮样式 */
         .glass-btn {
             background: rgba(255, 255, 255, 0.8); /* 亮模式下提高透明度 */
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(6px); /* 优化：降低模糊度 */
+            -webkit-backdrop-filter: blur(6px); /* 优化：降低模糊度 */
             border: 1px solid rgba(255, 255, 255, 0.4); /* 亮模式下提高边框透明度 */
             box-shadow: 0 4px 16px 0 rgba(31, 38, 135, 0.1);
             border-radius: 12px;
@@ -137,8 +143,8 @@
         /* 输入框样式 */
         .glass-input {
             background: rgba(255, 255, 255, 0.8); /* 亮模式下提高透明度 */
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(6px); /* 优化：降低模糊度 */
+            -webkit-backdrop-filter: blur(6px); /* 优化：降低模糊度 */
             border: 1px solid rgba(255, 255, 255, 0.4); /* 亮模式下提高边框透明度 */
             border-radius: 12px;
             padding: 12px 16px;
@@ -172,8 +178,8 @@
         /* 文件列表项 */
         .file-item {
             background: rgba(255, 255, 255, 0.8); /* 亮模式下提高透明度 */
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
+            backdrop-filter: blur(6px); /* 优化：降低模糊度 */
+            -webkit-backdrop-filter: blur(6px); /* 优化：降低模糊度 */
             border: 1px solid rgba(255, 255, 255, 0.4); /* 亮模式下提高边框透明度 */
             border-radius: 12px;
             transition: all 0.3s ease;
@@ -429,8 +435,8 @@
             display: flex;
             gap: 8px;
             background: rgba(79, 70, 229, 0.9); /* 保持原有透明度，因为颜色不同 */
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(12px); /* 优化：降低模糊度 */
+            -webkit-backdrop-filter: blur(12px); /* 优化：降低模糊度 */
             border: 1px solid rgba(255, 255, 255, 0.3);
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
             border-radius: 24px;
@@ -502,8 +508,8 @@
             top: 100%;
             margin-top: 8px;
             background: rgba(255, 255, 255, 0.8); /* 亮模式下调整透明度 */
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(12px); /* 优化：降低模糊度 */
+            -webkit-backdrop-filter: blur(12px); /* 优化：降低模糊度 */
             border: 1px solid rgba(255, 255, 255, 0.4); /* 亮模式下提高边框透明度 */
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
             border-radius: 12px;
@@ -1504,67 +1510,11 @@
                     isTicking = true;
                 }
             });
-
-            // --- Event Delegation for fileListElement ---
-            fileListElement.addEventListener('click', (e) => {
-                const fileItemElement = e.target.closest('.file-item');
-                if (!fileItemElement) return;
-
-                const itemName = fileItemElement.dataset.name;
-                const itemType = fileItemElement.dataset.type;
-                // Find the actual item object from currentFiles based on name and type
-                // For repos, also check fullPath to ensure uniqueness
-                const item = currentFiles.find(f => 
-                    f.name === itemName && 
-                    ((f.type === itemType) || (f.type === 'repo' && itemType === 'repo' && f.path === fileItemElement.dataset.fullPath))
-                ); 
-
-                if (!item) return;
-
-                if (batchToolbar.classList.contains('visible')) {
-                    e.stopPropagation();
-                    toggleFileSelection(fileItemElement, item);
-                    return;
-                }
-                
-                if (item.type === 'dir') {
-                    loadRepositoryContents(currentRepo, `${currentPath ? currentPath + '/' : ''}${item.name}`);
-                } else if (item.type === 'repo') {
-                    loadRepositoryContents(item.path);
-                } else if (item.type === 'file' && item.download_url) {
-                    window.open(item.download_url, '_blank');
-                }
-            });
-
-            fileListElement.addEventListener('contextmenu', (e) => {
-                const fileItemElement = e.target.closest('.file-item');
-                if (!fileItemElement) return;
-
-                const itemName = fileItemElement.dataset.name;
-                const itemType = fileItemElement.dataset.type;
-                // Find the actual item object from currentFiles based on name and type
-                // For repos, also check fullPath to ensure uniqueness
-                const item = currentFiles.find(f => 
-                    f.name === itemName && 
-                    ((f.type === itemType) || (f.type === 'repo' && itemType === 'repo' && f.path === fileItemElement.dataset.fullPath))
-                ); 
-
-                if (item) {
-                    showContextMenu(e, item);
-                }
-            });
-            // --- End Event Delegation ---
         
             // 初始显示工具栏
             showToolbar();
         });
         
-        // -------------------- 辅助函数 --------------------
-        function isMobileDevice() {
-            // Using matchMedia for better responsiveness detection
-            return window.matchMedia('(max-width: 768px)').matches;
-        }
-
         // -------------------- 外观设置相关函数 --------------------
         
         // 切换日夜模式
@@ -1753,15 +1703,8 @@
             contextOpen.style.display = fileInfo.type === 'dir' || fileInfo.type === 'repo' ? 'flex' : 'none';
             contextDownload.style.display = fileInfo.type === 'file' ? 'flex' : 'none';
             contextRename.style.display = fileInfo.type === 'file' || fileInfo.type === 'dir' ? 'flex' : 'none';
-            
-            // 复制链接功能在移动端禁用
-            if (isMobileDevice()) {
-                contextCopyLink.style.display = 'none';
-                contextCopyProxyLink.style.display = 'none';
-            } else {
-                contextCopyLink.style.display = fileInfo.type === 'file' ? 'flex' : 'none';
-                contextCopyProxyLink.style.display = fileInfo.type === 'file' ? 'flex' : 'none';
-            }
+            contextCopyLink.style.display = fileInfo.type === 'file' ? 'flex' : 'none';
+            contextCopyProxyLink.style.display = fileInfo.type === 'file' ? 'flex' : 'none';
             
             // 静态网站选项：仅对仓库或特定文件夹显示
             // 启用 Pages: 如果是仓库，或者在仓库内部且是 'docs' 文件夹
@@ -2085,9 +2028,6 @@
                                 }
                             }
                         `
-                        // Fallback to REST API for full file details if needed
-                        // This GraphQL query is efficient for listing, but for download_url, a REST call might be simpler.
-                        // For now, I'll construct download_url manually as it's a common pattern.
                     })
                 });
                 
@@ -2111,7 +2051,7 @@
                         `https://raw.githubusercontent.com/${repo}/${'main'}/${path ? path + '/' : ''}${entry.name}` : null
                 }));
                 
-                currentFiles = contents; // Store the actual file objects for event delegation lookup
+                currentFiles = contents;
                 
                 const sortedContents = [...contents].sort((a, b) => {
                     if (a.type === b.type) {
@@ -2181,9 +2121,9 @@
                 const pathItem = document.createElement('div');
                 pathItem.className = 'breadcrumb-item';
                 pathItem.textContent = parts[i];
-                // Store the full path for this breadcrumb item to allow navigation
-                const fullPathForClick = parts.slice(1, i + 1).join('/');
-                pathItem.onclick = ((repo, path) => () => loadRepositoryContents(repo, path))(parts[0], fullPathForClick);
+                pathItem.onclick = () => {
+                    loadRepositoryContents(parts[0], parts.slice(1, i + 1).join('/'));
+                };
                 breadcrumbContainer.appendChild(pathItem);
             }
         }
@@ -2194,7 +2134,7 @@
             return fileTypeIcons[extension] || 'fas fa-file text-gray-400';
         }
         
-        // 渲染文件列表 (Optimized with DocumentFragment and conditional copy buttons)
+        // 渲染文件列表
         function renderFileList(items) {
             fileListElement.innerHTML = '';
             loadingElement.classList.add('hidden');
@@ -2206,33 +2146,49 @@
             }
             
             fileListElement.classList.remove('hidden');
-
-            const fragment = document.createDocumentFragment(); // Use DocumentFragment for performance
             
             items.forEach(item => {
                 const fileItem = document.createElement('div');
                 fileItem.className = 'file-item p-4 flex items-center';
-                // Store data attributes for event delegation
                 fileItem.dataset.name = item.name;
                 fileItem.dataset.type = item.type;
-                // For repos, store the full path to distinguish from other items with same name
-                if (item.type === 'repo') {
-                    fileItem.dataset.fullPath = item.path; 
-                }
+                
+                // 添加右键菜单
+                fileItem.addEventListener('contextmenu', (e) => {
+                    showContextMenu(e, item);
+                });
+                
+                // 添加选择模式点击处理
+                fileItem.addEventListener('click', (e) => {
+                    if (batchToolbar.classList.contains('visible')) {
+                        e.stopPropagation();
+                        toggleFileSelection(fileItem, item);
+                        return;
+                    }
+                    
+                    if (item.type === 'dir') {
+                        loadRepositoryContents(currentRepo, `${currentPath ? currentPath + '/' : ''}${item.name}`);
+                    } else if (item.type === 'repo') {
+                        loadRepositoryContents(item.path);
+                    } else if (item.type === 'file' && item.download_url) {
+                        window.open(item.download_url, '_blank');
+                    }
+                });
                 
                 const icon = document.createElement('i');
                 icon.className = `file-icon ${item.type === 'dir' ? 'fas fa-folder folder-icon' : 
-                                     item.type === 'repo' ? 'fab fa-github github-repo-icon' : 
+                                     item.type === 'repo' ? 'fab fa-github github-repo-icon' : /* 修改：使用新的 github-repo-icon 类 */
                                      getFileIcon(item.name)}`;
                 
                 const infoContainer = document.createElement('div');
                 infoContainer.className = 'flex-1 min-w-0';
                 
                 const name = document.createElement('div');
-                name.className = 'font-medium truncate';
+                name.className = 'font-medium truncate'; /* Keep truncate for name, as names are usually short or meant to be truncated */
                 name.textContent = item.name;
                 
                 const meta = document.createElement('div');
+                // Removed 'truncate' class, added 'file-meta-text' for specific styling to ensure wrapping
                 meta.className = 'text-xs text-gray-500 dark:text-gray-400 file-meta-text'; 
                 
                 if (item.type === 'repo') {
@@ -2260,9 +2216,8 @@
                     const deleteBtn = document.createElement('button');
                     deleteBtn.className = 'glass-btn p-2 ml-2';
                     deleteBtn.innerHTML = '<i class="fas fa-trash text-red-500"></i>';
-                    deleteBtn.title = '删除文件';
                     deleteBtn.addEventListener('click', (e) => {
-                        e.stopPropagation(); // Prevent file item click
+                        e.stopPropagation();
                         showConfirmDialog(
                             '确认删除',
                             `您确定要删除文件 "${item.name}" 吗？此操作不可撤销。`,
@@ -2270,31 +2225,30 @@
                         );
                     });
 
-                    // Conditionally add copy buttons based on mobile detection
-                    if (!isMobileDevice()) {
-                        const copyRawLinkBtn = document.createElement('button');
-                        copyRawLinkBtn.className = 'glass-btn p-2 ml-2';
-                        copyRawLinkBtn.innerHTML = '<i class="fas fa-link text-blue-500"></i>';
-                        copyRawLinkBtn.title = '复制 Raw 链接';
-                        copyRawLinkBtn.addEventListener('click', (e) => {
-                            e.stopPropagation();
+                    const copyRawLinkBtn = document.createElement('button');
+                    copyRawLinkBtn.className = 'glass-btn p-2 ml-2';
+                    copyRawLinkBtn.innerHTML = '<i class="fas fa-link text-blue-500"></i>';
+                    copyRawLinkBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        if (item.type === 'file') {
                             copyToClipboard(item.download_url, 'Raw 链接已复制');
-                        });
+                        }
+                    });
 
-                        const copyProxyLinkBtn = document.createElement('button');
-                        copyProxyLinkBtn.className = 'glass-btn p-2 ml-2';
-                        copyProxyLinkBtn.innerHTML = '<i class="fas fa-share-alt text-green-500"></i>';
-                        copyProxyLinkBtn.title = '复制 jsDelivr CDN 链接';
-                        copyProxyLinkBtn.addEventListener('click', (e) => {
-                            e.stopPropagation();
+                    const copyProxyLinkBtn = document.createElement('button');
+                    copyProxyLinkBtn.className = 'glass-btn p-2 ml-2';
+                    copyProxyLinkBtn.innerHTML = '<i class="fas fa-share-alt text-green-500"></i>';
+                    copyProxyLinkBtn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        if (item.type === 'file') {
                             const [owner, repoName] = currentRepo.split('/');
                             const filePath = currentPath ? `${currentPath}/${item.name}` : item.name;
                             const jsdelivrLink = `https://cdn.jsdelivr.net/gh/${owner}/${repoName}@main/${filePath}`;
                             copyToClipboard(jsdelivrLink, 'jsDelivr CDN 链接已复制');
-                        });
-                        actionContainer.appendChild(copyProxyLinkBtn);
-                        actionContainer.appendChild(copyRawLinkBtn);
-                    }
+                        }
+                    });
+                    actionContainer.appendChild(copyProxyLinkBtn);
+                    actionContainer.appendChild(copyRawLinkBtn);
                     actionContainer.appendChild(deleteBtn);
                 }
                 
@@ -2302,28 +2256,15 @@
                 fileItem.appendChild(infoContainer);
                 fileItem.appendChild(actionContainer);
                 
-                fragment.appendChild(fileItem); // Append to fragment
+                fileListElement.appendChild(fileItem);
             });
-            fileListElement.appendChild(fragment); // Append fragment to DOM once
         }
         
         // 切换文件选择状态
         function toggleFileSelection(fileItem, fileInfo) {
             if (fileItem.classList.contains('selected')) {
                 fileItem.classList.remove('selected');
-                // Use a unique identifier for Set, e.g., a combined path string
-                const uniqueId = `${fileInfo.type}-${fileInfo.path || fileInfo.name}`;
-                selectedFiles.delete(fileInfo); // Still store the object, but check by ID
-                
-                // Remove from selectedFiles Set by comparing unique ID or reference
-                let found = false;
-                for (let sf of selectedFiles) {
-                    if ((sf.type === fileInfo.type) && (sf.path === fileInfo.path || sf.name === fileInfo.name)) {
-                        selectedFiles.delete(sf);
-                        found = true;
-                        break;
-                    }
-                }
+                selectedFiles.delete(fileInfo);
             } else {
                 fileItem.classList.add('selected');
                 selectedFiles.add(fileInfo);
@@ -2383,12 +2324,8 @@
             showToast(`已开始下载 ${file.name}`);
         }
         
-        // 复制到剪贴板 (Modified for mobile)
+        // 复制到剪贴板
         function copyToClipboard(text, successMessage) {
-            if (isMobileDevice()) {
-                showToast('移动端不支持复制功能');
-                return;
-            }
             navigator.clipboard.writeText(text).then(() => {
                 showToast(successMessage);
             }).catch((error) => {
@@ -2627,7 +2564,7 @@
         // 重命名文件
         async function renameFile(fileInfo) {
             try {
-                // Get the current file content and SHA
+                // 获取文件内容
                 const contentResponse = await fetch(
                     `https://api.github.com/repos/${currentRepo}/contents/${currentPath ? currentPath + '/' : ''}${fileInfo.name}`,
                     {
@@ -2644,18 +2581,14 @@
                 
                 const contentData = await contentResponse.json();
                 const sha = contentData.sha;
-                const content = contentData.content; // Base64 encoded content
-                // const encoding = contentData.encoding; // Usually 'base64'
+                const content = contentData.content;
+                const encoding = contentData.encoding;
                 
-                // Prompt user for new name
+                // 提示用户输入新文件名
                 const newName = prompt('请输入新的文件名:', fileInfo.name);
-                if (!newName || newName.trim() === fileInfo.name) {
-                    showToast('重命名已取消或文件名未改变');
-                    return;
-                }
-                const trimmedNewName = newName.trim();
-
-                // Delete the old file
+                if (!newName || newName === fileInfo.name) return;
+                
+                // 删除原文件
                 const deleteResponse = await fetch(
                     `https://api.github.com/repos/${currentRepo}/contents/${currentPath ? currentPath + '/' : ''}${fileInfo.name}`,
                     {
@@ -2665,20 +2598,19 @@
                             'Accept': 'application/vnd.github.v3+json'
                         },
                         body: JSON.stringify({
-                            message: `Rename ${fileInfo.name} to ${trimmedNewName}`,
-                            sha: sha // SHA of the file to be deleted
+                            message: `Rename ${fileInfo.name} to ${newName}`,
+                            sha: sha
                         })
                     }
                 );
                 
                 if (!deleteResponse.ok) {
-                    const errorData = await deleteResponse.json();
-                    throw new Error(errorData.message || '删除原文件失败');
+                    throw new Error('删除原文件失败');
                 }
                 
-                // Create the new file with the old content
+                // 创建新文件
                 const createResponse = await fetch(
-                    `https://api.github.com/repos/${currentRepo}/contents/${currentPath ? currentPath + '/' : ''}${trimmedNewName}`,
+                    `https://api.github.com/repos/${currentRepo}/contents/${currentPath ? currentPath + '/' : ''}${newName}`,
                     {
                         method: 'PUT',
                         headers: {
@@ -2686,9 +2618,9 @@
                             'Accept': 'application/vnd.github.v3+json'
                         },
                         body: JSON.stringify({
-                            message: `Rename ${fileInfo.name} to ${trimmedNewName}`,
-                            content: content, // Use the original content
-                            // encoding: encoding // Should be 'base64'
+                            message: `Rename ${fileInfo.name} to ${newName}`,
+                            content: content,
+                            encoding: encoding
                         })
                     }
                 );
@@ -2721,7 +2653,7 @@
                 // 显示上传进度
                 const progressToast = document.createElement('div');
                 progressToast.id = 'upload-progress';
-                progressToast.className = 'fixed bottom-20 left-1/2 transform -translate-x-1/2 glass-panel px-6 py-3 rounded-full text-sm font-medium';
+                progressToast.className = 'fixed bottom-20 left-1/2 transform -translate-x-50% glass-panel px-6 py-3 rounded-full text-sm font-medium';
                 progressToast.innerHTML = `准备上传 ${files.length} 个文件...`;
                 document.body.appendChild(progressToast);
 
@@ -2835,16 +2767,13 @@
                 const reader = new FileReader();
                 reader.onload = () => {
                     const arrayBuffer = reader.result;
-                    // Use TextDecoder to handle various encodings if necessary, or assume UTF-8 for typical text files
-                    // For binary files, btoa(String.fromCharCode(...new Uint8Array(arrayBuffer))) is common.
-                    // However, for general purpose, it's safer to convert ArrayBuffer to a binary string first.
                     const binaryString = Array.from(new Uint8Array(arrayBuffer))
                         .map(b => String.fromCharCode(b))
                         .join('');
                     resolve(btoa(binaryString));
                 };
                 reader.onerror = () => reject(new Error('文件读取失败'));
-                reader.readAsArrayBuffer(file); // Read as ArrayBuffer for binary safety
+                reader.readAsArrayBuffer(file);
             });
         }
 
@@ -2857,7 +2786,7 @@
                         headers: {
                             'Authorization': `token ${githubToken}`,
                             'Accept': 'application/vnd.github.v3+json',
-                            'Cache-Control': 'no-cache' // Ensure fresh data
+                            'Cache-Control': 'no-cache'
                         }
                     }
                 );
@@ -2866,24 +2795,19 @@
                     const data = await response.json();
                     return data.sha;
                 } else if (response.status === 404) {
-                    return null; // File does not exist
+                    return null; // 文件不存在
                 } else {
                     const errorData = await response.json();
                     throw new Error(errorData.message || '检查文件状态失败');
                 }
             } catch (error) {
                 console.error('获取SHA错误:', error);
-                // Do not rethrow if it's a 404, just return null. Rethrow other errors.
-                if (error.message && error.message.includes('检查文件状态失败')) {
-                    throw error;
-                }
-                return null; 
+                throw error;
             }
         }
 
         // 辅助函数：编码GitHub路径
         function encodeGitHubPath(path) {
-            // Encode each segment separately to preserve slashes
             return path.split('/').map(encodeURIComponent).join('/');
         }
         
