@@ -53,6 +53,12 @@
             padding-bottom: 100px;
             margin: 0;
             transition: background-color 0.3s ease, color 0.3s ease; /* 平滑过渡 */
+
+            /* 禁用长按复制文字 */
+            -webkit-user-select: none; /* Safari */
+            -moz-user-select: none; /* Firefox */
+            -ms-user-select: none; /* IE/Edge */
+            user-select: none; /* Standard */
         }
 
         /* 毛玻璃效果基础类 */
@@ -64,6 +70,7 @@
             box-shadow: var(--glass-shadow);
             border-radius: 16px;
             transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            will-change: background, border-color, box-shadow, transform; /* GPU 加速 */
         }
 
         /* 毛玻璃面板类，用于主要容器 */
@@ -75,6 +82,7 @@
             box-shadow: var(--glass-shadow); /* 使用变量 */
             border-radius: 16px; /* 确保圆角 */
             transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            will-change: background, border-color, box-shadow, transform; /* GPU 加速 */
         }
         body.dark-mode .glass-panel {
             background: var(--glass-bg); /* 使用夜间模式变量 */
@@ -94,6 +102,7 @@
             cursor: pointer;
             color: var(--text-primary);
             font-weight: 500;
+            will-change: transform, box-shadow, background; /* GPU 加速 */
         }
 
         .glass-btn:hover {
@@ -145,6 +154,12 @@
             color: var(--text-primary);
             transition: all 0.3s ease;
             width: 100%;
+            will-change: background, border-color, box-shadow; /* GPU 加速 */
+            /* 允许文本选择 */
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
         }
 
         .glass-input:focus {
@@ -178,6 +193,7 @@
             border-radius: 12px;
             transition: all 0.3s ease;
             cursor: pointer;
+            will-change: background, border-color, box-shadow, transform; /* GPU 加速 */
         }
 
         .file-item:hover {
@@ -246,6 +262,7 @@
             box-shadow: var(--glass-shadow);
             border-radius: 24px;
             transition: transform 0.3s ease, opacity 0.3s ease;
+            will-change: transform, opacity; /* GPU 加速 */
         }
         body.dark-mode .toolbar {
             background: var(--glass-bg);
@@ -265,6 +282,8 @@
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
             z-index: 999;
+            transition: opacity 0.3s ease; /* GPU 加速 */
+            will-change: opacity;
         }
 
         /* 对话框内容样式，现在完全依赖 glass-panel */
@@ -281,7 +300,8 @@
             border: 1px solid var(--glass-border);
             box-shadow: var(--glass-shadow);
             border-radius: 16px; /* 确保一致的圆角 */
-            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+            will-change: background, border-color, box-shadow, transform; /* GPU 加速 */
         }
         /* Dark mode for dialog content */
         body.dark-mode .dialog-content {
@@ -338,6 +358,7 @@
 
         .animate-spin {
             animation: spin 1s linear infinite;
+            will-change: transform; /* GPU 加速 */
         }
 
         /* 面包屑导航 */
@@ -353,6 +374,7 @@
             cursor: pointer;
             transition: color 0.2s;
             color: var(--text-secondary); /* 面包屑项颜色 */
+            will-change: color; /* GPU 加速 */
         }
 
         .breadcrumb-item:hover {
@@ -384,10 +406,11 @@
             transition: transform 0.2s ease, opacity 0.2s ease;
             pointer-events: none;
             color: var(--text-primary);
+            will-change: transform, opacity; /* GPU 加速 */
         }
         body.dark-mode .context-menu {
             background: rgba(45, 55, 72, 0.8); /* 暗模式下调整透明度 */
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 44px 20px rgba(0, 0, 0, 0.3);
         }
 
         .context-menu.visible {
@@ -402,6 +425,7 @@
             display: flex;
             align-items: center;
             transition: background 0.2s;
+            will-change: background; /* GPU 加速 */
         }
 
         .context-menu-item:hover {
@@ -440,6 +464,7 @@
             opacity: 0;
             transition: opacity 0.3s ease;
             pointer-events: none;
+            will-change: transform, opacity; /* GPU 加速 */
         }
         body.dark-mode .batch-toolbar {
             background: rgba(99, 102, 241, 0.9); /* 保持原有透明度，因为颜色不同 */
@@ -462,6 +487,7 @@
             display: flex;
             align-items: center;
             transition: all 0.2s;
+            will-change: background; /* GPU 加速 */
         }
         body.dark-mode .batch-toolbar-btn {
             background: rgba(30, 30, 30, 0.8); /* 暗模式下提高透明度 */
@@ -514,6 +540,7 @@
             transition: all 0.2s ease;
             pointer-events: none;
             color: var(--text-primary);
+            will-change: transform, opacity; /* GPU 加速 */
         }
         body.dark-mode .user-menu-content {
             background: rgba(45, 55, 72, 0.8); /* 暗模式下调整透明度 */
@@ -533,6 +560,7 @@
             display: flex;
             align-items: center;
             transition: background 0.2s;
+            will-change: background; /* GPU 加速 */
         }
 
         .user-menu-item:hover {
@@ -618,6 +646,7 @@
             z-index: 1050; /* 确保它在所有对话框和工具栏之上 */
             white-space: pre-wrap; /* 允许换行，优化文字显示 */
             text-align: center;
+            will-change: transform, opacity; /* GPU 加速 */
         }
 
         /* 确保文件列表项的元数据文本能够正常换行 */
@@ -637,27 +666,12 @@
         }
         #auth-screen a {
             color: var(--primary-color); /* 链接颜色 */
+            /* 允许链接文本选择 */
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
         }
-@media(max-width: 480px) {
-    /* 只在关键元素上启用GPU加速，避免影响整体布局 */
-            .glass,
-            .glass-panel,
-            .glass-btn,
-            .file-item,
-            .toolbar,
-            .breadcrumb,
-            .batch-toolbar,
-            .animate-spin,
-            .batch-toolbar-btn,
-            .dialog-content,
-            .dialog-input,
-            .dialog-btn,
-            .context-menu,
-            .dialog-overlay
-                   {
-        /* 开启GPU硬件加速 */
-        transform: translateZ(0);
-    }
     </style>
 </head>
 <body class="min-h-screen p-4 md:p-6">
