@@ -53,7 +53,8 @@
             padding-bottom: 100px;
             margin: 0;
             transition: background-color 0.3s ease, color 0.3s ease; /* 平滑过渡 */
-
+            /* GPU 加速：提示浏览器这些属性会变化，以便优化渲染 */
+            will-change: color;
             /* 禁用长按复制文字 */
             -webkit-user-select: none; /* Safari */
             -moz-user-select: none; /* Firefox */
