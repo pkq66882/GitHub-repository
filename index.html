@@ -39,6 +39,7 @@
         .top-nav {
             position: relative;
             z-index: 1000;
+            will-change: transform, opacity; /* Hint for animation */
         }
 
         body {
@@ -53,6 +54,21 @@
             padding-bottom: 100px;
             margin: 0;
             transition: background-color 0.3s ease, color 0.3s ease; /* 平滑过渡 */
+            /* 禁用文本选择和复制 */
+            -webkit-touch-callout: none; /* iOS Safari */
+            -webkit-user-select: none; /* Safari */
+            -khtml-user-select: none; /* Konqueror HTML */
+            -moz-user-select: none; /* Old versions of Firefox */
+            -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+        }
+
+        /* 允许输入框中的文本选择 */
+        input, textarea {
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
         }
 
         /* 毛玻璃效果基础类 */
@@ -64,6 +80,7 @@
             box-shadow: var(--glass-shadow);
             border-radius: 16px;
             transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            will-change: background, border-color, box-shadow; /* Hint for animation */
         }
 
         /* 毛玻璃面板类，用于主要容器 */
@@ -75,6 +92,7 @@
             box-shadow: var(--glass-shadow); /* 使用变量 */
             border-radius: 16px; /* 确保圆角 */
             transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            will-change: background, border-color, box-shadow, transform, opacity; /* Hint for animation */
         }
         body.dark-mode .glass-panel {
             background: var(--glass-bg); /* 使用夜间模式变量 */
@@ -94,6 +112,7 @@
             cursor: pointer;
             color: var(--text-primary);
             font-weight: 500;
+            will-change: transform, box-shadow, background; /* Hint for animation */
         }
 
         .glass-btn:hover {
@@ -145,6 +164,7 @@
             color: var(--text-primary);
             transition: all 0.3s ease;
             width: 100%;
+            will-change: background, border-color, box-shadow; /* Hint for animation */
         }
 
         .glass-input:focus {
@@ -178,6 +198,7 @@
             border-radius: 12px;
             transition: all 0.3s ease;
             cursor: pointer;
+            will-change: transform, box-shadow, background; /* Hint for animation */
         }
 
         .file-item:hover {
@@ -246,6 +267,7 @@
             box-shadow: var(--glass-shadow);
             border-radius: 24px;
             transition: transform 0.3s ease, opacity 0.3s ease;
+            will-change: transform, opacity; /* Hint for animation */
         }
         body.dark-mode .toolbar {
             background: var(--glass-bg);
@@ -265,6 +287,7 @@
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
             z-index: 999;
+            will-change: opacity; /* Hint for animation */
         }
 
         /* 对话框内容样式，现在完全依赖 glass-panel */
@@ -281,7 +304,8 @@
             border: 1px solid var(--glass-border);
             box-shadow: var(--glass-shadow);
             border-radius: 16px; /* 确保一致的圆角 */
-            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+            will-change: transform, opacity, background, border-color, box-shadow; /* Hint for animation */
         }
         /* Dark mode for dialog content */
         body.dark-mode .dialog-content {
@@ -338,6 +362,7 @@
 
         .animate-spin {
             animation: spin 1s linear infinite;
+            will-change: transform; /* Hint for animation */
         }
 
         /* 面包屑导航 */
@@ -353,6 +378,7 @@
             cursor: pointer;
             transition: color 0.2s;
             color: var(--text-secondary); /* 面包屑项颜色 */
+            will-change: color; /* Hint for animation */
         }
 
         .breadcrumb-item:hover {
@@ -384,6 +410,7 @@
             transition: transform 0.2s ease, opacity 0.2s ease;
             pointer-events: none;
             color: var(--text-primary);
+            will-change: transform, opacity; /* Hint for animation */
         }
         body.dark-mode .context-menu {
             background: rgba(45, 55, 72, 0.8); /* 暗模式下调整透明度 */
@@ -402,6 +429,7 @@
             display: flex;
             align-items: center;
             transition: background 0.2s;
+            will-change: background; /* Hint for animation */
         }
 
         .context-menu-item:hover {
@@ -440,6 +468,7 @@
             opacity: 0;
             transition: opacity 0.3s ease;
             pointer-events: none;
+            will-change: opacity, transform; /* Hint for animation */
         }
         body.dark-mode .batch-toolbar {
             background: rgba(99, 102, 241, 0.9); /* 保持原有透明度，因为颜色不同 */
@@ -462,6 +491,7 @@
             display: flex;
             align-items: center;
             transition: all 0.2s;
+            will-change: background; /* Hint for animation */
         }
         body.dark-mode .batch-toolbar-btn {
             background: rgba(30, 30, 30, 0.8); /* 暗模式下提高透明度 */
@@ -514,6 +544,7 @@
             transition: all 0.2s ease;
             pointer-events: none;
             color: var(--text-primary);
+            will-change: transform, opacity; /* Hint for animation */
         }
         body.dark-mode .user-menu-content {
             background: rgba(45, 55, 72, 0.8); /* 暗模式下调整透明度 */
@@ -533,6 +564,7 @@
             display: flex;
             align-items: center;
             transition: background 0.2s;
+            will-change: background; /* Hint for animation */
         }
 
         .user-menu-item:hover {
@@ -618,6 +650,7 @@
             z-index: 1050; /* 确保它在所有对话框和工具栏之上 */
             white-space: pre-wrap; /* 允许换行，优化文字显示 */
             text-align: center;
+            will-change: opacity; /* Hint for animation */
         }
 
         /* 确保文件列表项的元数据文本能够正常换行 */
@@ -2073,32 +2106,37 @@
             }
         }
         
-        // 更新面包屑导航
+        // 更新面包屑导航 (优化版：使用 DocumentFragment)
         function updateBreadcrumb(parts) {
             const breadcrumbContainer = currentPathElement.querySelector('.breadcrumb');
             breadcrumbContainer.innerHTML = '';
             
+            const fragment = document.createDocumentFragment();
+
             // 添加"我的仓库"根路径
             const rootItem = document.createElement('div');
             rootItem.className = 'breadcrumb-item';
             rootItem.innerHTML = '<i class="fab fa-github mr-1"></i><span>我的仓库</span>';
             rootItem.onclick = () => loadRepositories();
-            breadcrumbContainer.appendChild(rootItem);
+            fragment.appendChild(rootItem);
             
-            if (parts.length === 0) return;
+            if (parts.length === 0) {
+                breadcrumbContainer.appendChild(fragment);
+                return;
+            }
             
             // 添加分隔符
             const separator = document.createElement('div');
             separator.className = 'breadcrumb-separator';
             separator.innerHTML = '<i class="fas fa-chevron-right"></i>';
-            breadcrumbContainer.appendChild(separator);
+            fragment.appendChild(separator);
             
             // 添加仓库部分
             const repoItem = document.createElement('div');
             repoItem.className = 'breadcrumb-item';
             repoItem.textContent = parts[0];
             repoItem.onclick = () => loadRepositoryContents(parts[0]);
-            breadcrumbContainer.appendChild(repoItem);
+            fragment.appendChild(repoItem);
             
             // 添加路径部分
             let currentPath = parts[0];
@@ -2109,7 +2147,7 @@
                 const pathSeparator = document.createElement('div');
                 pathSeparator.className = 'breadcrumb-separator';
                 pathSeparator.innerHTML = '<i class="fas fa-chevron-right"></i>';
-                breadcrumbContainer.appendChild(pathSeparator);
+                fragment.appendChild(pathSeparator);
                 
                 // 添加路径项
                 const pathItem = document.createElement('div');
@@ -2118,8 +2156,9 @@
                 pathItem.onclick = () => {
                     loadRepositoryContents(parts[0], parts.slice(1, i + 1).join('/'));
                 };
-                breadcrumbContainer.appendChild(pathItem);
+                fragment.appendChild(pathItem);
             }
+            breadcrumbContainer.appendChild(fragment);
         }
         
         // 获取文件图标
@@ -2128,7 +2167,7 @@
             return fileTypeIcons[extension] || 'fas fa-file text-gray-400';
         }
         
-        // 渲染文件列表
+        // 渲染文件列表 (优化版：使用 DocumentFragment)
         function renderFileList(items) {
             fileListElement.innerHTML = '';
             loadingElement.classList.add('hidden');
@@ -2141,6 +2180,8 @@
             
             fileListElement.classList.remove('hidden');
             
+            const fragment = document.createDocumentFragment(); // Create a document fragment
+
             items.forEach(item => {
                 const fileItem = document.createElement('div');
                 fileItem.className = 'file-item p-4 flex items-center';
@@ -2250,8 +2291,9 @@
                 fileItem.appendChild(infoContainer);
                 fileItem.appendChild(actionContainer);
                 
-                fileListElement.appendChild(fileItem);
+                fragment.appendChild(fileItem); // Append to fragment instead of directly to DOM
             });
+            fileListElement.appendChild(fragment); // Append fragment to DOM once
         }
         
         // 切换文件选择状态
@@ -2683,7 +2725,9 @@
                 }
 
                 // 移除进度提示
-                document.body.removeChild(progressToast);
+                if (document.body.contains(progressToast)) {
+                    document.body.removeChild(progressToast);
+                }
                 
                 // 显示最终结果
                 if (failedUploads === 0) {
