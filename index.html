@@ -11,63 +11,72 @@
         /* CSS Variables for Theming */
         :root {
             /* Light Mode Defaults */
-            --bg-start: #f3f4f6;
-            --bg-end: #e5e7eb;
-            --glass-bg: rgba(255, 255, 255, 0.15);
-            --glass-border: rgba(255, 255, 255, 0.2);
-            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
             --primary-color: #4f46e5;
             --text-primary: #1e293b;
             --text-secondary: #475569;
-            --dialog-bg: rgba(255, 255, 255, 0.98);
+
+            --bg-gradient-start: #f3f4f6;
+            --bg-gradient-end: #e5e7eb;
+
+            --glass-bg: rgba(255, 255, 255, 0.15);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            --glass-blur: blur(12px);
+
+            --glass-panel-bg: rgba(255, 255, 255, 0.98);
             --dialog-input-bg: rgba(255, 255, 255, 0.95);
             --dialog-input-border: rgba(0, 0, 0, 0.08);
-            --context-menu-bg: rgba(255, 255, 255, 0.95);
-            --file-item-selected-bg: rgba(79, 70, 229, 0.2);
-            --file-item-selected-border: rgba(79, 70, 229, 0.3);
-            --batch-toolbar-bg: rgba(79, 70, 229, 0.9);
-            --scrollbar-thumb: rgba(79, 70, 229, 0.5);
-            --scrollbar-thumb-hover: rgba(79, 70, 229, 0.7);
+            --toast-bg: rgba(255, 255, 255, 0.95);
+            --scrollbar-track: rgba(255, 255, 255, 0.2);
         }
 
-        /* Dark Mode Overrides */
+        /* Dark Mode Variables */
         body.dark-mode {
-            --bg-start: #1a202c;
-            --bg-end: #2d3748;
+            --text-primary: #e2e8f0;
+            --text-secondary: #a0aec0;
+
+            --bg-gradient-start: #2d3748;
+            --bg-gradient-end: #1a202c;
+
             --glass-bg: rgba(0, 0, 0, 0.2);
             --glass-border: rgba(255, 255, 255, 0.1);
             --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-            --primary-color: #6366f1; /* A bit lighter for dark mode */
-            --text-primary: #e2e8f0;
-            --text-secondary: #a0aec0;
-            --dialog-bg: rgba(45, 55, 72, 0.98);
-            --dialog-input-bg: rgba(45, 55, 72, 0.95);
-            --dialog-input-border: rgba(255, 255, 255, 0.15);
-            --context-menu-bg: rgba(45, 55, 72, 0.95);
-            --file-item-selected-bg: rgba(99, 102, 241, 0.2);
-            --file-item-selected-border: rgba(99, 102, 241, 0.3);
-            --batch-toolbar-bg: rgba(99, 102, 241, 0.9);
-            --scrollbar-thumb: rgba(99, 102, 241, 0.5);
-            --scrollbar-thumb-hover: rgba(99, 102, 241, 0.7);
+
+            --glass-panel-bg: rgba(30, 41, 59, 0.9);
+            --dialog-input-bg: rgba(45, 55, 72, 0.9);
+            --dialog-input-border: rgba(255, 255, 255, 0.1);
+            --toast-bg: rgba(30, 41, 59, 0.9);
+            --scrollbar-track: rgba(0, 0, 0, 0.3);
         }
 
-        .top-nav{
-            position: relative;
-            z-index: 1000;
-        }
-        
+        /* Base Body Styles */
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, var(--bg-start) 0%, var(--bg-end) 100%);
             color: var(--text-primary);
             min-height: 100vh;
             padding-bottom: 100px;
             margin: 0;
             background-attachment: fixed;
-            background-size: cover; /* For custom background image */
-            background-position: center; /* For custom background image */
-            background-repeat: no-repeat; /* For custom background image */
-            transition: background-image 0.5s ease, background 0.3s ease, color 0.3s ease; /* Smooth transitions for theme and image */
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Apply default gradient if no custom image is set */
+        body:not([style*="background-image"]) {
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+        }
+        
+        .top-nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            margin-bottom: 0 !important; 
+            z-index: 1000; 
+        }
+        
+        /* Main screen padding to account for fixed top-nav */
+        #main-screen {
+            padding-top: 5rem; 
         }
         
         /* 毛玻璃效果 */
@@ -81,21 +90,21 @@
         }
         
         .glass-panel {
-            background: var(--glass-bg); /* Use glass-bg for consistency */
+            background: var(--glass-panel-bg);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border); /* Use glass-border for consistency */
+            border: 1px solid var(--glass-border);
             box-shadow: var(--glass-shadow);
             border-radius: 16px;
         }
         
         /* 按钮样式 */
         .glass-btn {
-            background: var(--glass-bg); /* Use glass-bg for consistency */
+            background: var(--glass-bg);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
-            border: 1px solid var(--glass-border); /* Use glass-border for consistency */
-            box-shadow: 0 4px 16px 0 rgba(31, 38, 135, 0.1); /* Keep a subtle shadow */
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 4px 16px 0 rgba(31, 38, 135, 0.1);
             border-radius: 12px;
             transition: all 0.3s ease;
             cursor: pointer;
@@ -106,30 +115,33 @@
         .glass-btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 6px 20px 0 rgba(31, 38, 135, 0.2);
-            background: color-mix(in srgb, var(--glass-bg) 90%, transparent); /* Slightly more opaque on hover */
+            background: rgba(255, 255, 255, 0.3); /* Slightly brighter on hover for glass effect */
         }
-        
+        body.dark-mode .glass-btn:hover {
+            background: rgba(255, 255, 255, 0.1); /* Darker glass hover */
+        }
+
         .glass-btn:active {
             transform: translateY(0);
             box-shadow: 0 2px 8px 0 rgba(31, 38, 135, 0.1);
         }
         
         .glass-btn-primary {
-            background: var(--primary-color);
+            background: rgba(79, 70, 229, 0.8);
             color: white;
-            border: 1px solid var(--glass-border); /* Use glass-border for consistency */
+            border: 1px solid rgba(255, 255, 255, 0.3);
         }
         
         .glass-btn-primary:hover {
-            background: color-mix(in srgb, var(--primary-color) 90%, black); /* Darken primary color on hover */
+            background: rgba(79, 70, 229, 0.9);
         }
         
         /* 输入框样式 */
         .glass-input {
-            background: var(--glass-bg); /* Use glass-bg for consistency */
+            background: var(--dialog-input-bg);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
-            border: 1px solid var(--glass-border); /* Use glass-border for consistency */
+            border: 1px solid var(--dialog-input-border);
             border-radius: 12px;
             padding: 12px 16px;
             color: var(--text-primary);
@@ -139,20 +151,23 @@
         
         .glass-input:focus {
             outline: none;
-            box-shadow: 0 0 0 2px color-mix(in srgb, var(--primary-color) 30%, transparent);
-            background: color-mix(in srgb, var(--glass-bg) 90%, transparent); /* Slightly more opaque on focus */
+            box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.3);
+            background: rgba(255, 255, 255, 0.3);
         }
-        
+        body.dark-mode .glass-input:focus {
+            background: rgba(45, 55, 72, 0.7);
+        }
+
         .glass-input::placeholder {
             color: var(--text-secondary);
         }
         
         /* 文件列表项 */
         .file-item {
-            background: var(--glass-bg); /* Use glass-bg for consistency */
+            background: var(--glass-bg);
             backdrop-filter: blur(8px);
             -webkit-backdrop-filter: blur(8px);
-            border: 1px solid var(--glass-border); /* Use glass-border for consistency */
+            border: 1px solid var(--glass-border);
             border-radius: 12px;
             transition: all 0.3s ease;
             cursor: pointer;
@@ -162,14 +177,17 @@
         }
         
         .file-item:hover {
-            background: color-mix(in srgb, var(--glass-bg) 90%, transparent); /* Slightly more opaque on hover */
+            background: rgba(255, 255, 255, 0.3);
             transform: translateY(-2px);
             box-shadow: 0 6px 20px 0 rgba(31, 38, 135, 0.1);
         }
-        
+        body.dark-mode .file-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
         .file-item.selected {
-            background: var(--file-item-selected-bg);
-            border-color: var(--file-item-selected-border);
+            background: rgba(79, 70, 229, 0.2);
+            border-color: rgba(79, 70, 229, 0.3);
         }
         
         /* 文件类型图标 */
@@ -197,13 +215,16 @@
         .text-icon {
             color: #64748b;
         }
+        .workflow-icon {
+            color: #8b5cf6; /* 紫色图标 */
+        }
         
         /* 工具栏 */
         .toolbar {
-            background: var(--glass-bg); /* Use glass-bg for consistency */
+            background: var(--glass-bg);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border); /* Use glass-border for consistency */
+            border: 1px solid var(--glass-border);
             box-shadow: var(--glass-shadow);
             border-radius: 24px;
             transition: transform 0.3s ease, opacity 0.3s ease;
@@ -224,13 +245,12 @@
         }
 
         .dialog-content {
-            background: var(--dialog-bg); 
+            background: var(--glass-panel-bg); 
             border-radius: 10px; 
             padding: 14px 16px; 
             width: 85%;
             max-width: 340px; 
             box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
-            color: var(--text-primary);
         }
 
         /* 标题 */
@@ -248,7 +268,6 @@
             font-size: 0.85rem;
             height: 36px; 
             margin-bottom: 0.6rem;
-            color: var(--text-primary);
         }
 
         /* 按钮容器 */
@@ -302,7 +321,6 @@
             align-items: center;
             cursor: pointer;
             transition: color 0.2s;
-            color: var(--text-secondary);
         }
         
         .breadcrumb-item:hover {
@@ -316,24 +334,26 @@
         
         /* 上下文菜单 */
         .context-menu {
-            position: fixed; /* Changed to fixed for better positioning */
+            position: fixed; /* Use fixed for consistent positioning relative to viewport */
             z-index: 1000;
-            background: var(--context-menu-bg);
+            background: var(--glass-panel-bg);
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
             min-width: 200px;
             overflow: hidden;
-            transform: scale(0.95);
             opacity: 0;
+            transform: scale(0.95);
             transition: transform 0.2s ease, opacity 0.2s ease;
             pointer-events: none;
-            color: var(--text-primary);
+            display: none; /* Hide by default */
+            flex-direction: column; /* Ensure items stack vertically */
         }
         
         .context-menu.visible {
             transform: scale(1);
             opacity: 1;
             pointer-events: auto;
+            display: flex; /* Show as flex container */
         }
         
         .context-menu-item {
@@ -342,12 +362,16 @@
             display: flex;
             align-items: center;
             transition: background 0.2s;
+            color: var(--text-primary);
         }
         
         .context-menu-item:hover {
-            background: rgba(0, 0, 0, 0.05); /* Keep a subtle hover effect */
+            background: rgba(0, 0, 0, 0.05);
         }
-        
+        body.dark-mode .context-menu-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
         .context-menu-item i {
             margin-right: 10px;
             width: 20px;
@@ -359,6 +383,9 @@
             background: rgba(0, 0, 0, 0.1);
             margin: 4px 0;
         }
+        body.dark-mode .context-menu-divider {
+            background: rgba(255, 255, 255, 0.1);
+        }
         
         /* 批量操作工具栏 */
         .batch-toolbar {
@@ -369,10 +396,10 @@
             display: flex;
             justify-content: center;
             gap: 8px;
-            background: var(--batch-toolbar-bg);
+            background: rgba(79, 70, 229, 0.9);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border); /* Use glass-border for consistency */
+            border: 1px solid rgba(255, 255, 255, 0.3);
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
             border-radius: 24px;
             padding: 8px 16px;
@@ -408,10 +435,6 @@
             background: rgba(255, 255, 255, 0.3);
         }
         
-        .batch-toolbar-btn i {
-            margin-right: 6px;
-        }
-        
         .batch-count {
             margin-right: 12px;
             display: flex;
@@ -435,11 +458,11 @@
             right: 0;
             top: 100%;
             margin-top: 8px;
-            background: var(--context-menu-bg); /* Use context-menu-bg for consistency */
+            background: var(--glass-panel-bg);
             backdrop-filter: blur(16px);
             -webkit-backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border); /* Use glass-border for consistency */
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+            border: 1px solid var(--glass-border);
+            box-shadow: var(--glass-shadow);
             border-radius: 12px;
             min-width: 180px;
             z-index: 1100;
@@ -447,7 +470,6 @@
             transform: translateY(-10px);
             transition: all 0.2s ease;
             pointer-events: none;
-            color: var(--text-primary);
         }
         
         .user-menu-content.show {
@@ -462,10 +484,14 @@
             display: flex;
             align-items: center;
             transition: background 0.2s;
+            color: var(--text-primary);
         }
         
         .user-menu-item:hover {
             background: rgba(0, 0, 0, 0.05);
+        }
+        body.dark-mode .user-menu-item:hover {
+            background: rgba(255, 255, 255, 0.05);
         }
         
         .user-menu-item i {
@@ -478,6 +504,9 @@
             height: 1px;
             background: rgba(0, 0, 0, 0.1);
             margin: 4px 0;
+        }
+        body.dark-mode .user-menu-divider {
+            background: rgba(255, 255, 255, 0.1);
         }
         
         /* 响应式调整 */
@@ -517,17 +546,17 @@
         }
         
         ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.2);
+            background: var(--scrollbar-track);
             border-radius: 4px;
         }
         
         ::-webkit-scrollbar-thumb {
-            background: var(--scrollbar-thumb);
+            background: rgba(79, 70, 229, 0.5);
             border-radius: 4px;
         }
         
         ::-webkit-scrollbar-thumb:hover {
-            background: var(--scrollbar-thumb-hover);
+            background: rgba(79, 70, 229, 0.7);
         }
         
         /* 构建状态提示 */
@@ -550,24 +579,6 @@
         .context-build-app {
             color: #3b82f6; /* 蓝色表示操作项 */
         }
-        .workflow-icon {
-            color: #8b5cf6; /* 紫色图标 */
-        }
-
-        /* 固定顶栏 */
-        .top-nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            margin-bottom: 0 !important; 
-            z-index: 1000; 
-        }
-
-        /* 主界面顶部内边距 */
-        #main-screen {
-            padding-top: 5rem; 
-        }
     </style>
 </head>
 <body class="min-h-screen p-4 md:p-6">
@@ -576,12 +587,12 @@
         <div class="glass-panel p-8 w-full max-w-md mx-auto">
             <div class="text-center mb-8">
                 <i class="fab fa-github text-5xl mb-4" style="color: var(--primary-color);"></i>
-                <h1 class="text-3xl font-bold text-gray-800 mb-2">GitHub Mgr</h1>
-                <p class="text-gray-600">使用您的 GitHub Token 登录</p>
+                <h1 class="text-3xl font-bold text-gray-800 dark:text-gray-200 mb-2">GitHub Mgr</h1>
+                <p class="text-gray-600 dark:text-gray-400">使用您的 GitHub Token 登录</p>
             </div>
             
             <div class="mb-6">
-                <label class="block text-gray-700 mb-2 font-medium">GitHub 个人访问令牌</label>
+                <label class="block text-gray-700 dark:text-gray-300 mb-2 font-medium">GitHub 个人访问令牌</label>
                 <input type="text" id="github-token" placeholder="输入您的 GitHub Token" 
                        class="glass-input mb-1">
                 <p id="token-error" class="text-red-500 text-sm hidden"></p>
@@ -592,11 +603,11 @@
                 <i id="auth-spinner" class="fas fa-spinner fa-spin ml-2 hidden"></i>
             </button>
             
-            <div class="mt-8 text-sm text-gray-600">
+            <div class="mt-8 text-sm text-gray-600 dark:text-gray-400">
                 <p class="font-medium mb-2">如何获取 Token？</p>
                 <ol class="list-decimal pl-5 space-y-1">
                     <li>登录 GitHub 账户</li>
-                    <li>访问 开发者设置</li>
+                    <li>访问 <a href="https://github.com/settings/tokens" target="_blank" class="text-blue-500 hover:underline">开发者设置</a></li>
                     <li>创建新的个人访问令牌</li>
                     <li>勾选 repo 权限</li>
                 </ol>
@@ -617,33 +628,35 @@
                 </div>
             </div>
             
-            <!-- 用户菜单和主题/背景按钮 -->
-            <div class="flex items-center ml-auto">
-                <button id="theme-toggle-btn" class="glass-btn p-2 mr-2" title="切换主题">
-                    <i class="fas fa-moon text-gray-700"></i>
-                </button>
-                <button id="bg-image-btn" class="glass-btn p-2 mr-2" title="自定义背景">
+            <!-- 用户菜单 -->
+            <div class="user-menu flex items-center">
+                <!-- 自定义背景按钮 -->
+                <button id="bg-settings-btn" class="glass-btn p-2 ml-2" title="背景设置">
                     <i class="fas fa-image text-blue-500"></i>
                 </button>
-                <div class="user-menu">
-                    <div id="user-menu-btn" class="user-menu-btn glass-btn p-2">
-                        <i class="fas fa-user-circle text-lg"></i>
+                <!-- 日夜模式切换按钮 -->
+                <button id="theme-toggle-btn" class="glass-btn p-2 ml-2" title="切换主题">
+                    <i class="fas fa-moon text-gray-700 dark:text-yellow-400"></i>
+                </button>
+
+                <div id="user-menu-btn" class="user-menu-btn glass-btn p-2 ml-2">
+                    <i class="fas fa-user-circle text-lg"></i>
+                </div>
+                <div id="user-menu-content" class="user-menu-content">
+                    <div id="user-info" class="user-menu-item">
+                        <i class="fas fa-user"></i>
+                        <span id="username"></span>
                     </div>
-                    <div id="user-menu-content" class="user-menu-content">
-                        <div id="user-info" class="user-menu-item">
-                            <i class="fas fa-user"></i>
-                            <span id="username"></span>
-                        </div>
-                        <div class="user-menu-divider"></div>
-                        <div id="logout-btn" class="user-menu-item">
-                            <i class="fas fa-sign-out-alt text-red-500"></i>
-                            <span class="text-red-500">退出登录</span>
-                        </div>
+                    <div class="user-menu-divider"></div>
+                    <div id="logout-btn" class="user-menu-item">
+                        <i class="fas fa-sign-out-alt text-red-500"></i>
+                        <span class="text-red-500">退出登录</span>
                     </div>
                 </div>
             </div>
         </div>
 
+        
         <!-- 文件列表区域 -->
         <div class="flex-1 overflow-y-auto">
             <div id="loading" class="flex justify-center items-center h-64">
@@ -654,7 +667,7 @@
                 <!-- 动态生成的文件列表 -->
             </div>
             
-            <div id="empty-state" class="hidden flex flex-col items-center justify-center h-64 text-gray-500">
+            <div id="empty-state" class="hidden flex flex-col items-center justify-center h-64 text-gray-500 dark:text-gray-400">
                 <i class="fas fa-folder-open text-5xl mb-4 opacity-50"></i>
                 <p class="text-lg">当前目录为空</p>
             </div>
@@ -689,6 +702,7 @@
             </button>
         </div>
 
+        
         <!-- 批量操作工具栏 -->
         <div id="batch-toolbar" class="batch-toolbar">
             <div class="batch-count">
@@ -717,8 +731,8 @@
     <!-- 确认对话框 -->
     <div id="confirm-dialog" class="fixed inset-0 z-50 dialog-overlay flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
         <div id="confirm-content" class="dialog-content p-6 rounded-xl w-full max-w-md transform scale-90 transition-transform duration-300">
-            <h3 id="confirm-title" class="text-xl font-bold mb-2">确认删除</h3>
-            <p id="confirm-message" class="text-gray-700 mb-6">您确定要删除这个文件吗？此操作不可撤销。</p>
+            <h3 id="confirm-title" class="text-xl font-bold mb-2 text-gray-800 dark:text-gray-200">确认删除</h3>
+            <p id="confirm-message" class="text-gray-700 dark:text-gray-300 mb-6">您确定要删除这个文件吗？此操作不可撤销。</p>
             <div id="confirm-buttons" class="flex justify-end gap-3">
                 <button id="confirm-no" class="glass-btn px-4 py-2">取消</button>
                 <button id="confirm-yes" class="glass-btn glass-btn-primary px-4 py-2">确认删除</button>
@@ -729,7 +743,7 @@
     <!-- 新建文件夹对话框 -->
     <div id="new-folder-dialog" class="fixed inset-0 z-50 dialog-overlay flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
         <div id="new-folder-content" class="dialog-content p-6 rounded-xl w-full max-w-md transform scale-90 transition-transform duration-300">
-            <h3 id="new-folder-title" class="text-xl font-bold mb-2">新建文件夹</h3>
+            <h3 id="new-folder-title" class="text-xl font-bold mb-2 text-gray-800 dark:text-gray-200">新建文件夹</h3>
             <input type="text" id="new-folder-name" placeholder="文件夹名称" class="glass-input mb-4">
             <div id="new-folder-buttons" class="flex justify-end gap-3">
                 <button id="new-folder-cancel" class="glass-btn px-4 py-2">取消</button>
@@ -741,10 +755,10 @@
     <!-- 新建仓库对话框 -->
 <div id="new-repo-dialog" class="fixed inset-0 z-50 dialog-overlay flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
     <div id="new-repo-content" class="dialog-content p-6 rounded-xl w-full max-w-md transform scale-90 transition-transform duration-300">
-        <h3 id="new-repo-title" class="text-xl font-bold mb-2">新建仓库</h3>
+        <h3 id="new-repo-title" class="text-xl font-bold mb-2 text-gray-800 dark:text-gray-200">新建仓库</h3>
         <input type="text" id="new-repo-name" placeholder="仓库名称" class="glass-input mb-3">
         <input type="text" id="new-repo-desc" placeholder="仓库描述 (可选)" class="glass-input mb-3">
-        <div class="flex items-center mb-4">
+        <div class="flex items-center mb-4 text-gray-700 dark:text-gray-300">
             <input type="checkbox" id="new-repo-private" class="mr-2">
             <label for="new-repo-private">私有仓库</label>
         </div>
@@ -758,7 +772,7 @@
 <!-- 复刻仓库对话框 -->
 <div id="fork-repo-dialog" class="fixed inset-0 z-50 dialog-overlay flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
     <div id="fork-repo-content" class="dialog-content p-6 rounded-xl w-full max-w-md transform scale-90 transition-transform duration-300">
-        <h3 id="fork-repo-title" class="text-xl font-bold mb-2">复刻仓库</h3>
+        <h3 id="fork-repo-title" class="text-xl font-bold mb-2 text-gray-800 dark:text-gray-200">复刻仓库</h3>
         <input type="text" id="fork-repo-url" placeholder="输入GitHub仓库URL" class="glass-input mb-4">
         <div id="fork-repo-buttons" class="flex justify-end gap-3">
             <button id="fork-repo-cancel" class="glass-btn px-4 py-2">取消</button>
@@ -770,7 +784,7 @@
     <!-- 上传文件对话框 -->
     <div id="upload-dialog" class="fixed inset-0 z-50 dialog-overlay flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
         <div id="upload-content" class="dialog-content p-6 rounded-xl w-full max-w-md transform scale-90 transition-transform duration-300">
-            <h3 id="upload-title" class="text-xl font-bold mb-2">上传文件</h3>
+            <h3 id="upload-title" class="text-xl font-bold mb-2 text-gray-800 dark:text-gray-200">上传文件</h3>
             <input type="file" id="file-input" class="glass-input mb-4" multiple>
             <div id="upload-buttons" class="flex justify-end gap-3">
                 <button id="upload-cancel" class="glass-btn px-4 py-2">取消</button>
@@ -822,10 +836,10 @@
     <!-- 添加静态网站配置对话框 -->
     <div id="static-site-dialog" class="fixed inset-0 z-50 dialog-overlay flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
         <div id="static-site-content" class="dialog-content p-6 rounded-xl w-full max-w-md transform scale-90 transition-transform duration-300">
-            <h3 id="static-site-title" class="text-xl font-bold mb-4">静态网站配置</h3>
+            <h3 id="static-site-title" class="text-xl font-bold mb-4 text-gray-800 dark:text-gray-200">静态网站配置</h3>
             
             <div class="mb-4">
-                <label class="block text-gray-700 mb-2 font-medium">分支</label>
+                <label class="block text-gray-700 dark:text-gray-300 mb-2 font-medium">分支</label>
                 <select id="pages-branch" class="glass-input mb-1">
                     <option value="main">main</option>
                     <option value="master">master</option>
@@ -834,7 +848,7 @@
             </div>
             
             <div class="mb-4">
-                <label class="block text-gray-700 mb-2 font-medium">目录</label>
+                <label class="block text-gray-700 dark:text-gray-300 mb-2 font-medium">目录</label>
                 <select id="pages-folder" class="glass-input mb-1">
                     <option value="/">根目录</option>
                     <option value="/docs">docs 文件夹</option>
@@ -844,10 +858,10 @@
             <div id="pages-status" class="mb-4 hidden">
                 <div class="flex items-center">
                     <i class="fas fa-circle text-green-500 mr-2"></i>
-                    <span class="font-medium">网站已启用</span>
+                    <span class="font-medium text-gray-700 dark:text-gray-300">网站已启用</span>
                 </div>
                 <div class="mt-2">
-                    <span class="text-sm">访问地址: </span>
+                    <span class="text-sm text-gray-700 dark:text-gray-300">访问地址: </span>
                     <a id="pages-url" href="#" target="_blank" class="text-blue-500 text-sm hover:underline"></a>
                 </div>
             </div>
@@ -863,29 +877,36 @@
     <div id="build-status" class="build-status glass-panel p-4 hidden">
         <div class="flex items-center mb-2">
             <i id="build-icon" class="fas fa-cog animate-spin text-blue-500 mr-2"></i>
-            <h3 class="font-semibold">构建状态</h3>
-            <button id="close-build-status" class="ml-auto text-gray-500 hover:text-gray-700">
+            <h3 class="font-semibold text-gray-800 dark:text-gray-200">构建状态</h3>
+            <button id="close-build-status" class="ml-auto text-gray-500 hover:text-gray-700 dark:hover:text-gray-300">
                 <i class="fas fa-times"></i>
             </button>
         </div>
-        <div id="build-message" class="text-sm"></div>
+        <div id="build-message" class="text-sm text-gray-700 dark:text-gray-300"></div>
         <div id="build-progress" class="mt-2">
             <div class="w-full bg-gray-200 rounded-full h-2">
-                <div class="bg-blue-500 h-2 rounded-full" style="width: 0%"></div>
+                <div id="progress-bar" class="bg-blue-500 h-2 rounded-full" style="width: 0%"></div>
             </div>
-            <div id="progress-text" class="text-xs text-right mt-1">0%</div>
+            <div id="progress-text" class="text-xs text-right mt-1 text-gray-700 dark:text-gray-300">0%</div>
         </div>
     </div>
 
-    <!-- New Dialog for Background Image -->
-    <div id="bg-image-dialog" class="fixed inset-0 z-50 dialog-overlay flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
-        <div class="dialog-content p-6 rounded-xl w-full max-w-md transform scale-90 transition-transform duration-300">
-            <h3 class="text-xl font-bold mb-2">设置背景图片</h3>
-            <input type="text" id="bg-image-url-input" placeholder="输入图片URL或留空使用默认" class="glass-input mb-4">
+    <!-- 个性化设置对话框 -->
+    <div id="settings-dialog" class="fixed inset-0 z-50 dialog-overlay flex items-center justify-center p-4 opacity-0 pointer-events-none transition-opacity duration-300">
+        <div id="settings-content" class="dialog-content p-6 rounded-xl w-full max-w-md transform scale-90 transition-transform duration-300">
+            <h3 class="text-xl font-bold mb-4 text-gray-800 dark:text-gray-200">个性化设置</h3>
+            
+            <div class="mb-4">
+                <label class="block text-gray-700 dark:text-gray-300 mb-2 font-medium">背景图片 URL</label>
+                <input type="text" id="bg-image-url" placeholder="输入图片 URL" class="glass-input mb-2">
+                <div class="flex justify-start gap-2">
+                    <button id="apply-bg-image-btn" class="glass-btn glass-btn-primary px-4 py-2">应用</button>
+                    <button id="reset-bg-image-btn" class="glass-btn px-4 py-2">重置</button>
+                </div>
+            </div>
+
             <div class="flex justify-end gap-3">
-                <button id="bg-image-cancel" class="glass-btn px-4 py-2">取消</button>
-                <button id="bg-image-set" class="glass-btn glass-btn-primary px-4 py-2">设置</button>
-                <button id="bg-image-reset" class="glass-btn px-4 py-2">重置</button>
+                <button id="settings-close-btn" class="glass-btn px-4 py-2">关闭</button>
             </div>
         </div>
     </div>
@@ -986,26 +1007,28 @@ const progressBar = document.getElementById('progress-bar');
 const progressText = document.getElementById('progress-text');
 const closeBuildStatus = document.getElementById('close-build-status');
 
-// New Theme and Background Elements
+// New elements for custom background and theme
+const DEFAULT_BG_IMAGE = 'https://picsum.photos/1920/1080?random=1'; // Default preset background image
+const bgSettingsBtn = document.getElementById('bg-settings-btn');
+const settingsDialog = document.getElementById('settings-dialog');
+const settingsContent = document.getElementById('settings-content');
+const bgImageUrlInput = document.getElementById('bg-image-url');
+const applyBgImageBtn = document.getElementById('apply-bg-image-btn');
+const resetBgImageBtn = document.getElementById('reset-bg-image-btn');
+const settingsCloseBtn = document.getElementById('settings-close-btn');
 const themeToggleBtn = document.getElementById('theme-toggle-btn');
-const bgImageBtn = document.getElementById('bg-image-btn');
-const bgImageDialog = document.getElementById('bg-image-dialog');
-const bgImageUrlInput = document.getElementById('bg-image-url-input');
-const bgImageSetBtn = document.getElementById('bg-image-set');
-const bgImageCancelBtn = document.getElementById('bg-image-cancel');
-const bgImageResetBtn = document.getElementById('bg-image-reset');
+const themeIcon = themeToggleBtn.querySelector('i');
+
 
 // 配置项
 const SCROLL_DELAY = 3000; // 滚动停止后显示工具栏的延迟时间(ms)
 const SCROLL_THRESHOLD = 10; // 滚动距离阈值(px)，小于此值不处理
-const DEFAULT_BG_IMAGE = 'https://bing.img.run/uhd.php'; // Default Unsplash image
 
 // 文件类型图标映射
 const fileTypeIcons = {
-
-// 工作流文件
-yml: 'fas fa-gears workflow-icon',
-yaml: 'fas fa-gears workflow-icon',
+    // 工作流文件
+    yml: 'fas fa-gears workflow-icon',
+    yaml: 'fas fa-gears workflow-icon',
     // 压缩文件
     zip: 'fas fa-file-archive archive-icon',
     rar: 'fas fa-file-archive archive-icon',
@@ -1053,8 +1076,6 @@ yaml: 'fas fa-gears workflow-icon',
     html: 'fas fa-file-code code-icon',
     htm: 'fas fa-file-code code-icon',
     xml: 'fas fa-file-code code-icon',
-    yml: 'fas fa-file-code code-icon',
-    yaml: 'fas fa-file-code code-icon',
     php: 'fas fa-file-code code-icon',
     py: 'fas fa-file-code code-icon',
     java: 'fas fa-file-code code-icon',
@@ -1141,15 +1162,6 @@ yaml: 'fas fa-gears workflow-icon',
 
 // 初始化
 document.addEventListener('DOMContentLoaded', () => {
-    // Apply saved theme
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    document.body.classList.toggle('dark-mode', savedTheme === 'dark');
-    themeToggleBtn.innerHTML = savedTheme === 'dark' ? '<i class="fas fa-sun text-yellow-500"></i>' : '<i class="fas fa-moon text-gray-700"></i>';
-
-    // Apply saved background image
-    const savedBgImage = localStorage.getItem('custom_bg_image');
-    applyBackgroundImage(savedBgImage !== null ? savedBgImage : DEFAULT_BG_IMAGE);
-
     // 检查本地存储中是否有 token
     const savedToken = localStorage.getItem('github_token');
     if (savedToken) {
@@ -1247,7 +1259,9 @@ document.addEventListener('DOMContentLoaded', () => {
             hideNewRepoDialog();
         }
     });
-
+    
+    
+    
     // 上传文件对话框事件监听
     uploadBtn.addEventListener('click', () => {
         showUploadDialog();
@@ -1430,54 +1444,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Theme Toggle Button
-    themeToggleBtn.addEventListener('click', () => {
-        const isDarkMode = document.body.classList.toggle('dark-mode');
-        localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
-        themeToggleBtn.innerHTML = isDarkMode ? '<i class="fas fa-sun text-yellow-500"></i>' : '<i class="fas fa-moon text-gray-700"></i>';
-    });
-
-    // Background Image Button
-    bgImageBtn.addEventListener('click', () => {
-        const currentBg = localStorage.getItem('custom_bg_image');
-        // If a custom image is set, show it. Otherwise, show the default image.
-        bgImageUrlInput.value = currentBg || DEFAULT_BG_IMAGE; 
-        showBgImageDialog();
-    });
-
-    bgImageSetBtn.addEventListener('click', () => {
-        const imageUrl = bgImageUrlInput.value.trim();
-        if (imageUrl) {
-            applyBackgroundImage(imageUrl);
-            localStorage.setItem('custom_bg_image', imageUrl);
-            showToast('背景图片已设置');
-        } else {
-            // If input is empty, set to default
-            applyBackgroundImage(DEFAULT_BG_IMAGE);
-            localStorage.setItem('custom_bg_image', DEFAULT_BG_IMAGE);
-            showToast('已恢复默认背景图片');
-        }
-        hideBgImageDialog();
-    });
-
-    bgImageResetBtn.addEventListener('click', () => {
-        applyBackgroundImage(DEFAULT_BG_IMAGE);
-        localStorage.setItem('custom_bg_image', DEFAULT_BG_IMAGE);
-        bgImageUrlInput.value = DEFAULT_BG_IMAGE; // Display default URL in input after reset
-        showToast('已恢复默认背景图片');
-        hideBgImageDialog();
-    });
-
-    bgImageCancelBtn.addEventListener('click', () => {
-        hideBgImageDialog();
-    });
-
-    bgImageDialog.addEventListener('click', (e) => {
-        if (e.target === bgImageDialog) {
-            hideBgImageDialog();
-        }
-    });
-
     // 优化后的滚动事件监听
     let isTicking = false;
     window.addEventListener('scroll', () => {
@@ -1490,8 +1456,68 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 初始显示工具栏
+    // Initial display of toolbar
     showToolbar();
+
+    // --- New Features Event Listeners ---
+    // Theme Toggle
+    themeToggleBtn.addEventListener('click', () => {
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        applyTheme(!isDarkMode);
+    });
+
+    // Background Image Settings
+    bgSettingsBtn.addEventListener('click', () => {
+        bgImageUrlInput.value = localStorage.getItem('custom_bg_image') || DEFAULT_BG_IMAGE;
+        settingsDialog.classList.add('opacity-100', 'pointer-events-auto');
+        settingsContent.classList.add('scale-100');
+        settingsContent.classList.remove('scale-90');
+    });
+
+    settingsCloseBtn.addEventListener('click', () => {
+        settingsDialog.classList.remove('opacity-100', 'pointer-events-auto');
+        settingsContent.classList.add('scale-90');
+        settingsContent.classList.remove('scale-100');
+    });
+
+    settingsDialog.addEventListener('click', (e) => {
+        if (e.target === settingsDialog) {
+            settingsCloseBtn.click();
+        }
+    });
+
+    applyBgImageBtn.addEventListener('click', () => {
+        const url = bgImageUrlInput.value.trim();
+        if (url) {
+            applyBackgroundImage(url);
+            showToast('背景图片已应用');
+        } else {
+            showToast('请输入有效的图片URL');
+        }
+    });
+
+    resetBgImageBtn.addEventListener('click', () => {
+        applyBackgroundImage(''); // Clear custom image, let CSS handle default gradient
+        bgImageUrlInput.value = DEFAULT_BG_IMAGE;
+        showToast('背景图片已重置为默认');
+    });
+
+    // Apply saved settings on load (order matters: theme first, then background)
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+        applyTheme(true);
+    } else {
+        applyTheme(false); // Default to light if no preference or 'light'
+    }
+
+    const savedBgImage = localStorage.getItem('custom_bg_image');
+    if (savedBgImage && savedBgImage !== 'null' && savedBgImage !== '') {
+        applyBackgroundImage(savedBgImage);
+        bgImageUrlInput.value = savedBgImage;
+    } else {
+        applyBackgroundImage(DEFAULT_BG_IMAGE); // Apply default if none saved
+        bgImageUrlInput.value = DEFAULT_BG_IMAGE;
+    }
 });
 
 // 优化后的滚动事件处理
@@ -1623,7 +1649,7 @@ function showUploadDialog() {
     fileInput.value = '';
     uploadDialog.classList.add('opacity-100', 'pointer-events-auto');
     document.getElementById('upload-content').classList.add('scale-100');
-    document.getElementById('upload-content').classList.remove('scale-100');
+    document.getElementById('upload-content').classList.remove('scale-90');
 }
 
 // 隐藏上传文件对话框
@@ -1633,94 +1659,66 @@ function hideUploadDialog() {
     document.getElementById('upload-content').classList.remove('scale-100');
 }
 
-// 显示背景图片对话框
-function showBgImageDialog() {
-    bgImageDialog.classList.add('opacity-100', 'pointer-events-auto');
-    bgImageDialog.querySelector('.dialog-content').classList.add('scale-100');
-    bgImageDialog.querySelector('.dialog-content').classList.remove('scale-90');
-    bgImageUrlInput.focus();
-}
-
-// 隐藏背景图片对话框
-function hideBgImageDialog() {
-    bgImageDialog.classList.remove('opacity-100', 'pointer-events-auto');
-    bgImageDialog.querySelector('.dialog-content').classList.add('scale-90');
-    bgImageDialog.querySelector('.dialog-content').classList.remove('scale-100');
-}
-
-// 应用背景图片
-function applyBackgroundImage(url) {
-    document.body.style.backgroundImage = url ? `url('${url}')` : '';
-}
-
 // 显示上下文菜单
 function showContextMenu(e, fileInfo) {
     e.preventDefault();
     contextMenuTarget = fileInfo;
-    
-    // Temporarily make it visible to get dimensions
-    contextMenu.classList.add('visible'); 
-    contextMenu.style.left = '0px'; // Reset position
-    contextMenu.style.top = '0px'; // Reset position
 
-    const menuWidth = contextMenu.offsetWidth;
-    const menuHeight = contextMenu.offsetHeight;
+    // Make it visible to calculate dimensions correctly
+    contextMenu.classList.add('visible'); // This applies opacity and transform
+    contextMenu.style.display = 'flex'; // Ensure it's rendered for offsetWidth/Height
 
-    let x = e.clientX;
-    let y = e.clientY;
+    // Give a small delay for the browser to render and apply styles before measuring
+    setTimeout(() => {
+        const menuWidth = contextMenu.offsetWidth;
+        const menuHeight = contextMenu.offsetHeight;
 
-    // Adjust if it goes off screen to the right
-    if (x + menuWidth > window.innerWidth - 10) {
-        x = window.innerWidth - menuWidth - 10;
-    }
-    // Adjust if it goes off screen to the bottom
-    if (y + menuHeight > window.innerHeight - 10) {
-        y = window.innerHeight - menuHeight - 10;
-    }
-    // Ensure it doesn't go off screen to the left (e.g., if x is very small)
-    if (x < 10) {
-        x = 10;
-    }
-    // Ensure it doesn't go off screen to the top
-    if (y < 10) {
-        y = 10;
-    }
+        let x = e.clientX;
+        let y = e.clientY;
 
-    contextMenu.style.left = `${x}px`;
-    contextMenu.style.top = `${y}px`;
-    
-    // 根据文件类型显示/隐藏菜单项
-    contextOpen.style.display = fileInfo.type === 'dir' || fileInfo.type === 'repo' ? 'flex' : 'none';
-    contextDownload.style.display = fileInfo.type === 'file' ? 'flex' : 'none';
-    contextRename.style.display = fileInfo.type === 'file' || fileInfo.type === 'dir' ? 'flex' : 'none';
-    contextCopyLink.style.display = fileInfo.type === 'file' ? 'flex' : 'none';
-    contextCopyProxyLink.style.display = fileInfo.type === 'file' ? 'flex' : 'none';
-    
-    // 静态网站选项：仅对仓库或特定文件夹显示
-    contextEnablePages.style.display = (fileInfo.type === 'repo' || 
-                                      (fileInfo.type === 'dir' && fileInfo.name.toLowerCase() === 'docs')) ? 'flex' : 'none';
-    
-    // 构建APP选项：仅在仓库上显示
-    contextBuildApp.style.display = fileInfo.type === 'repo' ? 'flex' : 'none';
-    
-    // The class 'visible' is already added above.
+        // Adjust x to stay within viewport
+        if (x + menuWidth > window.innerWidth - 10) {
+            x = window.innerWidth - menuWidth - 10;
+        }
+        if (x < 10) { // Prevent going too far left
+            x = 10;
+        }
+
+        // Adjust y to stay within viewport
+        if (y + menuHeight > window.innerHeight - 10) {
+            y = window.innerHeight - menuHeight - 10;
+        }
+        if (y < 10) { // Prevent going too far up
+            y = 10;
+        }
+
+        contextMenu.style.left = `${x}px`;
+        contextMenu.style.top = `${y}px`;
+
+        // 根据文件类型显示/隐藏菜单项
+        contextOpen.style.display = fileInfo.type === 'dir' || fileInfo.type === 'repo' ? 'flex' : 'none';
+        contextDownload.style.display = fileInfo.type === 'file' ? 'flex' : 'none';
+        contextRename.style.display = fileInfo.type === 'file' || fileInfo.type === 'dir' ? 'flex' : 'none';
+        contextCopyLink.style.display = fileInfo.type === 'file' ? 'flex' : 'none';
+        contextCopyProxyLink.style.display = fileInfo.type === 'file' ? 'flex' : 'none';
+        
+        // 静态网站选项：仅对仓库或特定文件夹显示
+        contextEnablePages.style.display = (fileInfo.type === 'repo' || 
+                                          (fileInfo.type === 'dir' && fileInfo.name.toLowerCase() === 'docs')) ? 'flex' : 'none';
+        
+        // 构建APP选项：仅在仓库上显示
+        contextBuildApp.style.display = fileInfo.type === 'repo' ? 'flex' : 'none';
+    }, 0); // Use setTimeout with 0 delay to defer execution until after current render cycle
 }
 
 // 隐藏上下文菜单
 function hideContextMenu() {
     contextMenu.classList.remove('visible');
+    // Hide completely after transition to ensure offsetWidth/Height are 0 when hidden
+    setTimeout(() => {
+        contextMenu.style.display = 'none';
+    }, 200); // Match transition duration
     contextMenuTarget = null;
-}
-
-// 打开上下文菜单项
-function openContextItem(fileInfo) {
-    if (fileInfo.type === 'dir') {
-        loadRepositoryContents(currentRepo, `${currentPath ? currentPath + '/' : ''}${fileInfo.name}`);
-    } else if (fileInfo.type === 'repo') {
-        loadRepositoryContents(fileInfo.path);
-    } else if (fileInfo.type === 'file' && fileInfo.download_url) {
-        window.open(fileInfo.download_url, '_blank');
-    }
 }
 
 // 显示批量操作工具栏
@@ -2162,7 +2160,7 @@ function renderFileList(items) {
         
         const icon = document.createElement('i');
         icon.className = `file-icon ${item.type === 'dir' ? 'fas fa-folder folder-icon' : 
-                                 item.type === 'repo' ? 'fab fa-github text-gray-700' : 
+                                 item.type === 'repo' ? 'fab fa-github text-gray-700 dark:text-gray-300' : 
                                  getFileIcon(item.name)}`;
         
         const infoContainer = document.createElement('div');
@@ -2173,7 +2171,7 @@ function renderFileList(items) {
         name.textContent = item.name;
         
         const meta = document.createElement('div');
-        meta.className = 'text-xs text-gray-500 truncate';
+        meta.className = 'text-xs text-gray-500 dark:text-gray-400 truncate';
         
         if (item.type === 'repo') {
             meta.textContent = item.private ? '私有仓库' : '公开仓库';
@@ -2907,9 +2905,10 @@ backBtn.addEventListener('click', () => {
     }
     
     const pathParts = currentPath.split('/');
-    const newPath = pathParts.slice(0, pathParts.length - 1).join('/'); // Corrected slice to remove last element
-
-    if (newPath === '') { // If pathParts becomes empty after pop, go to root of repo
+    pathParts.pop();
+    const newPath = pathParts.join('/');
+    
+    if (pathParts.length === 0) {
         loadRepositoryContents(currentRepo);
     } else {
         loadRepositoryContents(currentRepo, newPath);
@@ -3245,6 +3244,47 @@ async function forkRepository(repoUrl) {
     } catch (error) {
         console.error('复刻仓库错误:', error);
         showToast('复刻仓库失败: ' + error.message);
+    }
+}
+
+// --- New Functions for Theme and Background ---
+
+// Function to apply background image
+function applyBackgroundImage(url) {
+    if (url) {
+        document.body.style.backgroundImage = `url('${url}')`;
+        document.body.style.backgroundSize = 'cover';
+        document.body.style.backgroundPosition = 'center';
+        document.body.style.backgroundAttachment = 'fixed';
+    } else {
+        // If no URL, clear inline style and let CSS handle default gradient
+        document.body.style.backgroundImage = '';
+        document.body.style.backgroundSize = '';
+        document.body.style.backgroundPosition = '';
+        document.body.style.backgroundAttachment = '';
+    }
+    localStorage.setItem('custom_bg_image', url);
+}
+
+// Function to apply theme (day/night mode)
+function applyTheme(isDarkMode) {
+    if (isDarkMode) {
+        document.body.classList.add('dark-mode');
+        themeIcon.classList.remove('fa-moon', 'text-gray-700');
+        themeIcon.classList.add('fa-sun', 'text-yellow-400');
+    } else {
+        document.body.classList.remove('dark-mode');
+        themeIcon.classList.remove('fa-sun', 'text-yellow-400');
+        themeIcon.classList.add('fa-moon', 'text-gray-700');
+    }
+    localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
+
+    // Re-apply background image to ensure correct interaction with theme gradients
+    const savedBgImage = localStorage.getItem('custom_bg_image');
+    if (savedBgImage && savedBgImage !== 'null' && savedBgImage !== '') { // Check for 'null' string from localStorage
+        applyBackgroundImage(savedBgImage);
+    } else {
+        applyBackgroundImage(''); // Clear custom image, let CSS handle gradient
     }
 }
 
