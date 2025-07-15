@@ -60,6 +60,7 @@
             position: relative;
             overflow-x: hidden; /* Prevent horizontal scroll */
             transition: background-color 0.3s ease;
+            transform: translateZ(0); /* 全局强制GPU加速 */
         }
 
         /* 全屏背景层 */
@@ -74,7 +75,6 @@
             background-size: cover;
             background-position: center;
             transition: background 0.5s ease;
-            will-change: background; /* GPU acceleration hint */
         }
 
         /* 毛玻璃效果基础 */
@@ -85,7 +85,6 @@
             border: 1px solid var(--glass-border);
             box-shadow: var(--glass-shadow);
             border-radius: 16px;
-            will-change: transform, opacity, background-color, box-shadow; /* GPU acceleration hint */
         }
 
         /* 卡片/面板样式 */
@@ -97,7 +96,6 @@
             box-shadow: var(--glass-shadow);
             border-radius: 20px;
             padding: 24px;
-            will-change: transform, opacity, background-color, box-shadow; /* GPU acceleration hint */
         }
 
         /* 按钮样式 */
@@ -110,7 +108,6 @@
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s ease;
-            will-change: transform, background-color, box-shadow; /* GPU acceleration hint */
             border: none; /* Remove default button border */
         }
 
@@ -161,7 +158,6 @@
             color: var(--text-primary);
             transition: all 0.2s ease;
             width: 100%;
-            will-change: background-color, border-color, box-shadow; /* GPU acceleration hint */
         }
 
         .input-field:focus {
@@ -184,7 +180,6 @@
             border-radius: 14px;
             transition: all 0.2s ease;
             cursor: pointer;
-            will-change: transform, background-color, box-shadow; /* GPU acceleration hint */
         }
 
         .file-item:hover {
@@ -225,7 +220,6 @@
             border-bottom: 1px solid var(--glass-border);
             box-shadow: var(--glass-shadow);
             border-radius: 0 0 20px 20px; /* Rounded bottom corners */
-            will-change: background-color, box-shadow; /* GPU acceleration hint */
         }
 
         /* 底部工具栏 */
@@ -243,7 +237,6 @@
             border-radius: 9999px; /* Pill shape */
             transition: all 0.3s ease;
             z-index: 900;
-            will-change: transform, opacity, background-color, box-shadow; /* GPU acceleration hint */
         }
 
         .toolbar.hidden {
@@ -269,7 +262,6 @@
             max-width: 450px;
             box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
             transition: transform 0.3s ease, opacity 0.3s ease;
-            will-change: transform, opacity, background-color, box-shadow; /* GPU acceleration hint */
         }
 
         .dialog-overlay.opacity-0 .dialog-content {
@@ -328,7 +320,6 @@
             transform: scale(0.9);
             transition: transform 0.2s ease, opacity 0.2s ease;
             pointer-events: none;
-            will-change: transform, opacity, background-color, box-shadow; /* GPU acceleration hint */
         }
 
         .context-menu.visible {
@@ -389,7 +380,6 @@
             transition: all 0.3s ease;
             pointer-events: none;
             z-index: 950;
-            will-change: transform, opacity, background-color, box-shadow; /* GPU acceleration hint */
         }
 
         .batch-toolbar.visible {
@@ -437,7 +427,6 @@
             transition: all 0.2s ease;
             pointer-events: none;
             overflow: hidden;
-            will-change: transform, opacity, background-color, box-shadow; /* GPU acceleration hint */
         }
 
         .user-menu-content.show {
@@ -485,7 +474,6 @@
             box-shadow: var(--glass-shadow);
             border-radius: 16px;
             transition: transform 0.3s ease, opacity 0.3s ease;
-            will-change: transform, opacity, background-color, box-shadow; /* GPU acceleration hint */
         }
 
         .build-status.hidden {
